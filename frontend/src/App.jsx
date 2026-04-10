@@ -1,13 +1,27 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+
 import Navbar from "./components/Navbar/Navbar";
-import Home from "./pages/User/Home/Home";
 import Footer from "./components/Footer/Footer";
+
+import Home from "./pages/User/Home/Home";
+import Medicine from "./pages/User/Medicine";
+
 function App() {
   return (
-    <>
+    <BrowserRouter>
+
+      {/* Navbar always visible */}
       <Navbar />
-      <Home />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/medicine" element={<Medicine />} />
+      </Routes>
+
+      {/* Footer always visible */}
       <Footer />
-    </>
+
+    </BrowserRouter>
   );
 }
 
