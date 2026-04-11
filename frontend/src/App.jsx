@@ -10,6 +10,10 @@ import Doctor from "./pages/User/Doctor";
 import About from "./pages/User/About";
 import Login from "./pages/User/Login";
 import Signup from "./pages/User/Signup";
+import MedicalDetail from "./pages/User/MedicalDetail";
+import ChackOut from "./pages/User/ChackOut";
+import OrderSuccess from "./pages/User/OrderSuccess";
+
 
 // Pharmacy imports
 import Layout from "./pages/medical/Layout";
@@ -51,6 +55,11 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/medical-detail" element={<MedicalDetail />} />
+        <Route path="/checkout" element={<ChackOut />} />
+        <Route path="/order-success" element={<OrderSuccess />} />
+
+
 
         {/* --- PHARMACY ROUTES (Dashboard with Sidebar - NO User Navbar/Footer) --- */}
         <Route path="/pharmacy" element={<Layout />}>
