@@ -11,6 +11,9 @@ import About from "./pages/User/About";
 import Login from "./pages/User/Login";
 import Signup from "./pages/User/Signup";
 
+
+import PharmacyAdmin from "./pages/Medical/PharmacyAdmin";
+
 function App() {
   return (
     <BrowserRouter>
@@ -26,6 +29,10 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+
+        {/* Medical Admin Routes */}
+        <Route path="/pharmacy-admin" element={<PharmacyAdmin />} />
+        
       </Routes>
 
       {/* Footer always visible */}

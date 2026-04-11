@@ -13,7 +13,7 @@ const Navbar = () => {
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-8">
           <a
-            className="text-blue-700 dark:text-blue-400 font-bold  pb-1"
+           className="text-slate-600 dark:text-slate-400 hover:text-blue-600 dark:hover:text-blue-300 transition-colors"
             href="/"
           >
             Home
