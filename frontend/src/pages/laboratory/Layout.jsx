@@ -4,32 +4,19 @@ import { NavLink, Outlet } from 'react-router-dom';
 const Layout = () => {
 
   const menuItems = [
-    { name: 'Dashboard', path: '/pharmacy', icon: 'dashboard' },
-    { name: 'Medicines', path: '/pharmacy/medicines', icon: 'medication' },
-    { name: 'Orders', path: '/pharmacy/orders', icon: 'shopping_cart' },
-    { name: 'Inventory', path: '/pharmacy/inventory', icon: 'inventory_2' },
-    { name: 'Analytics', path: '/pharmacy/analytics', icon: 'analytics' },
+    { name: 'Dashboard', path: '/laboratory', icon: 'dashboard' },
+    { name: 'Medicines', path: '/laboratory/test', icon: 'medication' },
+    { name: 'Orders', path: '/laboratory/report', icon: 'shopping_cart' },
+    // { name: 'Inventory', path: '/laboratory/inventory', icon: 'inventory_2' },
+    // { name: 'Analytics', path: '/laboratory/analytics', icon: 'analytics' },
   ];
 
   return (
     <div className="flex min-h-screen">
       {/* --- SIDEBAR START --- */}
-      <aside className="fixed left-0 top-0 h-full flex flex-col p-4 bg-slate-50 dark:bg-slate-900 w-64 border-r border-slate-200 dark:border-slate-800 z-50">
+      <aside className="fixed left-0 top-0 h-full flex flex-col p-4 bg-slate-50 dark:bg-slate-900 w-64 border-r border-slate-200 dark:border-slate-800 z-50 mt-20">
         
-        {/* Logo Section */}
-        <div className="flex items-center gap-3 px-2 mb-8">
-          <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white shadow-lg shadow-blue-200">
-            <span className="material-symbols-outlined" style={{ fontVariationSettings: "'FILL' 1" }}>
-              medical_services
-            </span>
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight text-blue-800 dark:text-blue-300 leading-none">MediHelp</h1>
-            <p className="text-xs text-slate-500 font-medium tracking-wide mt-0.5">Pharmacy Cloud</p>
-          </div>
-        </div>
-
-        {/* Navigation Links */}
+               {/* Navigation Links */}
         <nav className="flex-1 space-y-1">
           {menuItems.map((item) => (
             <NavLink

@@ -12,10 +12,17 @@ import Login from "./pages/User/Login";
 import Signup from "./pages/User/Signup";
 
 // Pharmacy imports
-import Layout from "./components/Layout";
+import Layout from "./pages/medical/Layout";
 import Dashboard from "./pages/medical/Dashboard";
 import Orders from "./pages/medical/Orders";
 import Medicines from "./pages/medical/Medicines";
+
+// Laboratory imports
+import LabLayout from "./pages/laboratory/Layout";
+import LabDashboard from "./pages/laboratory/Dashboard";
+import TestBooking from "./pages/laboratory/TestBooking";
+import Report from "./pages/laboratory/Report";
+
 
 function App() {
   return (
@@ -38,6 +45,16 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="medicines" element={<Medicines />} />
         </Route>
+
+
+
+        {/* --- LABORATORY ROUTES (Dashboard with Sidebar - NO User Navbar/Footer) --- */}
+        <Route path="/laboratory" element={<LabLayout />}>
+          <Route index element={<LabDashboard />} />  
+          <Route path="test" element={<TestBooking />} />
+          <Route path="report" element={<Report />} />
+        </Route>
+
       </Routes>
 
       {/* Footer always visible */}
