@@ -11,7 +11,7 @@ export default function About() {
               Empathetic Precision
             </span>
             <h1 className="font-headline text-5xl md:text-7xl font-bold text-on-background tracking-tighter leading-tight mb-6">
-              About MediHelp
+              About MediOne
             </h1>
             <p className="text-xl md:text-2xl text-on-surface-variant leading-relaxed mb-10 max-w-xl">
               Connecting you with medicines, labs, and doctors near you through
@@ -49,7 +49,7 @@ export default function About() {
                 Our Mission
               </h2>
               <p class="text-xl text-on-surface-variant leading-relaxed">
-                In a world of fragmented healthcare, MediHelp acts as the
+                In a world of fragmented healthcare, MediOne acts as the
                 digital bridge. We solve the complexity of finding trusted local
                 services by curating a network of verified medicine providers,
                 labs, and physicians—all accessible through one seamless
@@ -179,7 +179,7 @@ export default function About() {
         <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="font-headline text-4xl font-bold mb-12">
-              The MediHelp Advantage
+              The MediOne Advantage
             </h2>
             <div className="grid grid-cols-2 gap-6">
               <div className="p-6 rounded-2xl bg-surface-container-low hover:bg-white transition-colors border border-transparent hover:border-outline-variant/20">
@@ -342,7 +342,7 @@ export default function About() {
 
               {/* Review Text */}
               <h3 className="text-3xl md:text-4xl font-headline font-bold leading-tight mb-8">
-                "MediHelp found a rare medication for my mother within 10
+                "MediOne found a rare medication for my mother within 10
                 minutes when five local pharmacies said they were out of stock.
                 It truly is a lifesaver."
               </h3>
@@ -372,7 +372,7 @@ export default function About() {
       <section className="py-24 px-8">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="font-headline text-4xl md:text-5xl font-bold mb-8">
-            Start using MediHelp today
+            Start using MediOne today
           </h2>
           <p className="text-xl text-on-surface-variant mb-12">
             Experience the future of healthcare connectivity. Simple, fast, and

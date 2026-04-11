@@ -3,7 +3,7 @@ import React from "react";
 export default function Labe() {
   return (
     <>
-      <section className="relative py-16 px-8 flex flex-col items-center overflow-hidden">
+      <section className="relative py-16 px-8 flex flex-col items-center overflow-hidden mt-20">
         {/* Background */}
         <div className="absolute inset-0 -z-10 bg-gradient-to-b from-primary/5 to-transparent"></div>
 
