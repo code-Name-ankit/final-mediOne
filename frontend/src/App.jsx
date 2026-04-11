@@ -31,6 +31,12 @@ import Consultation from "./pages/doctor/Consultation";
 import Prescriptions from "./pages/doctor/Prescriptions";
 // import Analytics from "./pages/doctor/Analytics";
 
+// Admin imports (if needed, can be added similarly to Pharmacy/Laboratory/Doctor)
+import AdminLayout from "./pages/admin/Layout";
+import AdminDashboard from "./pages/admin/Dashboard";
+import Provider from "./pages/admin/Provider";
+import User from "./pages/admin/User";
+
 function App() {
   return (
     <BrowserRouter>
@@ -70,6 +76,14 @@ function App() {
           <Route path="prescriptions" element={<Prescriptions />} />
           {/* <Route path="analytics" element={<Analytics />} /> */}
         </Route>
+
+        {/* --- ADMIN ROUTES (Dashboard with Sidebar - NO User Navbar/Footer) --- */}
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route index element={<AdminDashboard />} />
+          <Route path="Provider" element={<Provider />} />
+          <Route path="User" element={<User />} />
+        </Route>
+
 
       </Routes>
 
