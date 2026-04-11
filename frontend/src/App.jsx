@@ -23,6 +23,13 @@ import LabDashboard from "./pages/laboratory/Dashboard";
 import TestBooking from "./pages/laboratory/TestBooking";
 import Report from "./pages/laboratory/Report";
 
+// Doctor imports
+import DoctorLayout from "./pages/doctor/Layout";
+import DoctorDashboard from "./pages/doctor/Dashboard";
+import Appointments from "./pages/doctor/Appointments";
+import Consultation from "./pages/doctor/Consultation";
+import Prescriptions from "./pages/doctor/Prescriptions";
+// import Analytics from "./pages/doctor/Analytics";
 
 function App() {
   return (
@@ -53,6 +60,15 @@ function App() {
           <Route index element={<LabDashboard />} />  
           <Route path="test" element={<TestBooking />} />
           <Route path="report" element={<Report />} />
+        </Route>
+
+        {/* --- DOCTOR ROUTES (Dashboard with Sidebar - NO User Navbar/Footer) --- */}
+        <Route path="/doctor" element={<DoctorLayout />}>
+          <Route index element={<DoctorDashboard />} />
+          <Route path="appointments" element={<Appointments />} />
+          <Route path="consultation" element={<Consultation />} />
+          <Route path="prescriptions" element={<Prescriptions />} />
+          {/* <Route path="analytics" element={<Analytics />} /> */}
         </Route>
 
       </Routes>
