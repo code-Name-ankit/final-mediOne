@@ -11,13 +11,15 @@ import About from "./pages/User/About";
 import Login from "./pages/User/Login";
 import Signup from "./pages/User/Signup";
 
-
-import PharmacyAdmin from "./pages/Medical/PharmacyAdmin";
+// Pharmacy imports
+import Layout from "./components/Layout";
+import Dashboard from "./pages/medical/Dashboard";
+import Orders from "./pages/medical/Orders";
+import Medicines from "./pages/medical/Medicines";
 
 function App() {
   return (
     <BrowserRouter>
-
       {/* Navbar always visible */}
       <Navbar />
 
@@ -30,14 +32,16 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
 
-        {/* Medical Admin Routes */}
-        <Route path="/pharmacy-admin" element={<PharmacyAdmin />} />
-        
+        {/* --- PHARMACY ROUTES (Dashboard with Sidebar - NO User Navbar/Footer) --- */}
+        <Route path="/pharmacy" element={<Layout />}>
+          <Route index element={<Dashboard />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="medicines" element={<Medicines />} />
+        </Route>
       </Routes>
 
       {/* Footer always visible */}
       <Footer />
-
     </BrowserRouter>
   );
 }
