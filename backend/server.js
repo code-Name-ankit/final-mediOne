@@ -3,6 +3,9 @@ import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import cors from "cors";
 
+
+import searchRoutes from "./routes/searchRoutes.js";
+
 dotenv.config();
 
 const app = express();
@@ -10,6 +13,11 @@ const app = express();
 // middleware
 app.use(express.json());
 app.use(cors());
+
+
+
+
+app.use("/api/search", searchRoutes);
 // test route
 app.get("/", (req, res) => {
   res.send("Server is running...");
