@@ -9,7 +9,7 @@ const Sidebar = () => {
           MH
         </div>
         <div>
-          <h2 className="text-lg font-bold text-slate-800">MediHelp</h2>
+          <h2 className="text-lg font-bold text-slate-800">mediOne</h2>
           <p className="text-xs text-slate-500">Pharmacy Cloud</p>
         </div>
       </div>

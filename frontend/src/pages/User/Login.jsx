@@ -20,7 +20,7 @@ export default function Login() {
           {/* 2. Content Layer - Isme z-10 zaroori hai taaki text image ke upar dikhe */}
           <div className="z-10">
             <span className="text-2xl font-bold tracking-tight text-white">
-              MediHelp
+              mediOne
             </span>
           </div>
 

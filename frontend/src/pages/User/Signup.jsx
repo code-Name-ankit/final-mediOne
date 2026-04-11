@@ -18,7 +18,7 @@ export default function Signup() {
             {/* <!-- Brand Anchor Logic: Product Name from JSON --> */}
             <div className="mb-12">
               <span className="font-headline font-extrabold tracking-tight text-6xl text-white">
-                MediHelp
+                mediOne
               </span>
             </div>
             <div className="space-y-6">
@@ -61,7 +61,7 @@ export default function Signup() {
             {/* <!-- Branding for Mobile --> */}
             <div className="lg:hidden mb-12 flex justify-center">
               <span className="font-headline font-bold text-3xl text-primary">
-                MediHelp
+                mediOne
               </span>
             </div>
             <div className="mb-10 text-center lg:text-left">

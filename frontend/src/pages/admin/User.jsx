@@ -11,7 +11,7 @@ export default function User() {
             </h1>
             <p class="mt-2 text-body-lg text-on-surface-variant max-w-2xl">
               Control clinical access, manage provider credentials, and audit
-              user activity across the MediHelp network.
+              user activity across the mediOne network.
             </p>
           </div>
           <div class="flex gap-3">
@@ -134,7 +134,7 @@ export default function User() {
                   </div>
                 </td>
                 <td class="px-6 py-4 text-sm text-on-surface-variant">
-                  julian.thorne@medihelp.com
+                  julian.thorne@mediOne.com
                 </td>
                 <td class="px-6 py-4">
                   <span class="px-3 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-700 border border-blue-100">

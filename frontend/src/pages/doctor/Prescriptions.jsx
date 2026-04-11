@@ -210,7 +210,7 @@ export default function Prescriptions() {
                         </span>
                       </div>
                       <span class="font-headline font-bold text-sm tracking-tight">
-                        MediHelp Digital Rx
+                        mediOne Digital Rx
                       </span>
                     </div>
                     <div class="text-right">
