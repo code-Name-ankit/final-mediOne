@@ -5,7 +5,8 @@ import Footer from "./components/Footer/Footer";
 
 import Home from "./pages/User/Home/Home";
 import Medicine from "./pages/User/Medicine";
-
+import Labe from "./pages/User/Labe";
+import Doctor from "./pages/User/Doctor";
 function App() {
   return (
     <BrowserRouter>
@@ -16,6 +17,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/medicine" element={<Medicine />} />
+        <Route path="/labe" element={<Labe />} />
+        <Route path="/doctor" element={<Doctor />} />
       </Routes>
 
       {/* Footer always visible */}

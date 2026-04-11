@@ -1,81 +1,85 @@
 import React from "react";
 
 export default function Medicine() {
-  
   return (
     <>
       {/* <!-- Search & Filter Bar Section --> */}
       <section className="bg-surface px-8 pt-6 pb-4 mt-20">
-        <div class="max-w-[1920px] mx-auto flex flex-col gap-6">
-          <div class="flex flex-wrap lg:flex-nowrap gap-4 items-center">
-            {/* <!-- Glassmorphism Search Bar --> */}
-            <div class="flex-grow flex items-center bg-surface/70 backdrop-blur-md rounded-full shadow-lg shadow-slate-200/50 p-2 border border-white/40">
-              <div class="flex items-center px-4 border-r border-outline-variant/30 min-w-[200px]">
-                <span
-                  class="material-symbols-outlined text-outline mr-2"
-                  data-icon="location_on"
-                >
+        <div className="max-w-[1920px] mx-auto flex flex-col gap-6">
+          {/* Search Bar */}
+          <div className="flex flex-wrap lg:flex-nowrap gap-4 items-center">
+            <div className="flex-grow flex items-center bg-surface/70 backdrop-blur-md rounded-full shadow-lg shadow-slate-200/50 p-2 border border-white/40">
+              {/* Location */}
+              <div className="flex items-center px-4 border-r border-outline-variant/30 min-w-[200px]">
+                <span className="material-symbols-outlined text-outline mr-2">
                   location_on
                 </span>
-                <span class="text-sm font-medium">New York, NY</span>
+                <span className="text-sm font-medium">New York, NY</span>
               </div>
-              <div class="flex-grow flex items-center px-4">
-                <span
-                  class="material-symbols-outlined text-outline mr-3"
-                  data-icon="search"
-                >
+
+              {/* Input */}
+              <div className="flex-grow flex items-center px-4">
+                <span className="material-symbols-outlined text-outline mr-3">
                   search
                 </span>
                 <input
-                  class="w-full bg-transparent border-none focus:ring-0 text-sm font-medium placeholder:text-slate-400"
+                  className="w-full bg-transparent border-none outline-none focus:outline-none focus:ring-0 focus:border-none text-sm font-medium placeholder:text-slate-400"
                   placeholder="Search for medicines (e.g. Paracetamol)"
                   type="text"
                 />
               </div>
-              <button class="p-2 hover:bg-surface-container rounded-full transition-colors">
-                <span
-                  class="material-symbols-outlined text-outline"
-                  data-icon="mic"
-                >
+
+              {/* Mic Button */}
+              <button className="p-2 hover:bg-surface-container rounded-full transition-colors">
+                <span className="material-symbols-outlined text-outline">
                   mic
                 </span>
               </button>
-              <button class="bg-gradient-to-br from-primary to-primary-container text-white px-8 py-3 rounded-full font-bold shadow-md hover:scale-[0.98] transition-transform ml-2">
+
+              {/* Search Button */}
+              <button className="bg-gradient-to-br from-primary to-primary-container text-white px-8 py-3 rounded-full font-bold shadow-md hover:scale-[0.98] transition-transform ml-2">
                 Search
               </button>
             </div>
           </div>
-          {/* <!-- Filters --> */}
-          <div class="flex items-center gap-4 overflow-x-auto pb-2 medicine-scroll">
-            <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-xl text-sm font-medium">
-              <span class="text-outline">Distance:</span>
-              <select class="bg-transparent border-none focus:ring-0 text-primary p-0 text-sm font-bold">
+
+          {/* Filters */}
+          <div className="flex items-center gap-4 overflow-x-auto pb-2 medicine-scroll">
+            {/* Distance */}
+            <div className="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-xl text-sm font-medium">
+              <span className="text-outline">Distance:</span>
+              <select className="bg-transparent border-none focus:ring-0 text-primary p-0 text-sm font-bold">
                 <option>1km</option>
-                <option selected="">5km</option>
+                <option defaultValue>5km</option>
                 <option>10km</option>
               </select>
             </div>
-            <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-xl text-sm font-medium">
-              <span class="text-outline">Availability:</span>
-              <select class="bg-transparent border-none focus:ring-0 text-primary p-0 text-sm font-bold">
-                <option selected="">In Stock</option>
+
+            {/* Availability */}
+            <div className="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-xl text-sm font-medium">
+              <span className="text-outline">Availability:</span>
+              <select className="bg-transparent border-none focus:ring-0 text-primary p-0 text-sm font-bold">
+                <option defaultValue>In Stock</option>
                 <option>All</option>
               </select>
             </div>
-            <div class="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-xl text-sm font-medium">
-              <span class="text-outline">Price Range:</span>
-              <select class="bg-transparent border-none focus:ring-0 text-primary p-0 text-sm font-bold">
-                <option selected="">Under $50</option>
-                <option>$50 - $100</option>
+
+            {/* Price */}
+            <div className="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-xl text-sm font-medium">
+              <span className="text-outline">Price Range:</span>
+              <select className="bg-transparent border-none focus:ring-0 text-primary p-0 text-sm font-bold">
+                <option defaultValue>Under ₹50</option>
+                <option>₹50 - ₹100</option>
                 <option>Any</option>
               </select>
             </div>
-            <div class="h-6 w-px bg-outline-variant/30"></div>
-            <button class="flex items-center gap-2 px-4 py-2 text-primary font-bold text-sm">
-              <span
-                class="material-symbols-outlined text-[18px]"
-                data-icon="tune"
-              >
+
+            {/* Divider */}
+            <div className="h-6 w-px bg-outline-variant/30"></div>
+
+            {/* More Filters */}
+            <button className="flex items-center gap-2 px-4 py-2 text-primary font-bold text-sm">
+              <span className="material-symbols-outlined text-[18px]">
                 tune
               </span>
               More Filters
@@ -129,7 +133,7 @@ export default function Medicine() {
 
               <div className="flex justify-between items-center mb-6">
                 <div>
-                  <span className="text-2xl font-bold">$12.50</span>
+                  <span className="text-2xl font-bold">₹12.50</span>
                   <p className="text-xs text-gray-400">Per 100mg (12 Tabs)</p>
                 </div>
 
@@ -174,7 +178,7 @@ export default function Medicine() {
               </div>
 
               <div className="flex justify-between items-center mb-6">
-                <span className="text-2xl font-bold">$14.00</span>
+                <span className="text-2xl font-bold">₹14.00</span>
 
                 <span className="bg-red-100 text-red-600 text-xs font-bold px-3 py-1.5 rounded-full">
                   Out of Stock
@@ -209,7 +213,7 @@ export default function Medicine() {
               </div>
 
               <div className="flex justify-between items-center mb-6">
-                <span className="text-2xl font-bold">$11.99</span>
+                <span className="text-2xl font-bold">₹11.99</span>
 
                 <span className="bg-green-100 text-green-600 text-xs font-bold px-3 py-1.5 rounded-full">
                   In Stock
@@ -266,7 +270,7 @@ export default function Medicine() {
                   City Care Pharmacy
                 </p>
                 <p class="text-[10px] text-secondary font-bold">
-                  In Stock • $12.50
+                  In Stock • ₹12.50
                 </p>
                 <div class="absolute top-full left-1/2 -translate-x-1/2 border-8 border-transparent border-t-white"></div>
               </div>
@@ -294,23 +298,31 @@ export default function Medicine() {
                   medical_services
                 </span>
               </div>
-              
             </div>
-            
           </div>
           <button class="fixed bottom-8 right-8 bg-on-background text-white flex items-center gap-4 px-6 py-4 rounded-full shadow-2xl shadow-slate-900/40 hover:scale-105 transition-transform z-[60]">
-<div class="relative">
-<span class="material-symbols-outlined" data-icon="shopping_bag">shopping_bag</span>
-<span class="absolute -top-1 -right-1 bg-secondary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-black">2</span>
-</div>
-<div class="text-left">
-<p class="text-[10px] uppercase font-bold tracking-widest leading-none opacity-60">View Cart</p>
-<p class="text-sm font-bold leading-none">$25.00</p>
-</div>
-<span class="material-symbols-outlined text-[20px]" data-icon="arrow_forward">arrow_forward</span>
-</button>
+            <div class="relative">
+              <span class="material-symbols-outlined" data-icon="shopping_bag">
+                shopping_bag
+              </span>
+              <span class="absolute -top-1 -right-1 bg-secondary text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center font-black">
+                2
+              </span>
+            </div>
+            <div class="text-left">
+              <p class="text-[10px] uppercase font-bold tracking-widest leading-none opacity-60">
+                View Cart
+              </p>
+              <p class="text-sm font-bold leading-none">₹25.00</p>
+            </div>
+            <span
+              class="material-symbols-outlined text-[20px]"
+              data-icon="arrow_forward"
+            >
+              arrow_forward
+            </span>
+          </button>
         </div>
-        
       </section>
     </>
   );
