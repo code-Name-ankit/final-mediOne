@@ -5,6 +5,7 @@ import cors from "cors";
 
 
 import searchRoutes from "./routes/searchRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ app.use(cors());
 
 
 app.use("/api/search", searchRoutes);
+app.use("/api/auth", authRoutes);
+
 // test route
 app.get("/", (req, res) => {
   res.send("Server is running...");

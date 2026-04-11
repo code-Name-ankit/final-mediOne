@@ -1,6 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
+import axios from "axios";
 
 export default function Signup() {
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    role: "user",
+  });
+
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  if (formData.password !== formData.confirmPassword) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  try {
+    const res = await axios.post(
+      "http://localhost:5000/api/auth/register",
+      {
+        name: formData.name,
+        email: formData.email,
+        password: formData.password,
+        role: formData.role,
+      }
+    );
+
+    alert("Registered successfully ✅");
+    console.log(res.data);
+
+  } catch (err) {
+    console.error(err);
+    alert("Registration failed ❌");
+  }
+};
+
   return (
     <>
       <main className="min-h-screen flex">
@@ -78,7 +116,11 @@ export default function Signup() {
                 Select your role
               </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                <button className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-lowest border-2 border-primary ring-offset-2 transition-all group">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "user" })}
+                  className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-lowest border-2 border-primary ring-offset-2 transition-all group "
+                >
                   <span className="material-symbols-outlined text-primary mb-1">
                     person
                   </span>
@@ -86,7 +128,11 @@ export default function Signup() {
                     User
                   </span>
                 </button>
-                <button className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all group">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "medical" })}
+                  className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all group"
+                >
                   <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-1">
                     local_pharmacy
                   </span>
@@ -94,7 +140,11 @@ export default function Signup() {
                     Pharmacy
                   </span>
                 </button>
-                <button className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all group">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "lab" })}
+                  className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all group"
+                >
                   <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-1">
                     biotech
                   </span>
@@ -102,7 +152,11 @@ export default function Signup() {
                     Lab
                   </span>
                 </button>
-                <button className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all group">
+                <button
+                  type="button"
+                  onClick={() => setFormData({ ...formData, role: "doctor" })}
+                  className="flex flex-col items-center justify-center p-4 rounded-xl bg-surface-container-low hover:bg-surface-container-high transition-all group"
+                >
                   <span className="material-symbols-outlined text-on-surface-variant group-hover:text-primary mb-1">
                     medical_services
                   </span>
@@ -113,13 +167,17 @@ export default function Signup() {
               </div>
             </div>
             {/* <!-- Form Fields --> */}
-            <form className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6">
               <div>
                 <label className="block font-label text-label-md text-on-surface-variant mb-2 ml-1">
                   Full Name
                 </label>
                 <input
                   className="w-full h-14 px-5 rounded-xl bg-surface-container-highest border-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline"
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData({ ...formData, name: e.target.value })
+                  }
                   placeholder="John Doe"
                   type="text"
                 />
@@ -130,6 +188,10 @@ export default function Signup() {
                 </label>
                 <input
                   class="w-full h-14 px-5 rounded-xl bg-surface-container-highest border-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline"
+                  value={formData.email}
+                  onChange={(e) =>
+                    setFormData({ ...formData, email: e.target.value })
+                  }
                   placeholder="name@email.com"
                   type="text"
                 />
@@ -141,34 +203,44 @@ export default function Signup() {
                   </label>
                   <input
                     className="w-full h-14 px-5 rounded-xl bg-surface-container-highest border-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline"
+                    value={formData.password}
+                    onChange={(e) =>
+                      setFormData({ ...formData, password: e.target.value })
+                    }
                     placeholder="••••••••"
                     type="password"
                   />
                   {/* <!-- Password Strength --> */}
-                  <div className="mt-2 flex gap-1 px-1">
+                  {/* <div className="mt-2 flex gap-1 px-1">
                     <div className="h-1 w-1/3 rounded-full bg-secondary"></div>
                     <div className="h-1 w-1/3 rounded-full bg-secondary"></div>
                     <div className="h-1 w-1/3 rounded-full bg-surface-container-high"></div>
-                  </div>
-                  <p className="text-[10px] text-secondary mt-1 font-medium ml-1">
+                  </div> */}
+                  {/* <p className="text-[10px] text-secondary mt-1 font-medium ml-1">
                     Medium strength password
-                  </p>
+                  </p> */}
                 </div>
                 <div>
                   <label class="block font-label text-label-md text-on-surface-variant mb-2 ml-1">
-                   Confirm Password
+                    Confirm Password
                   </label>
                   <input
                     className="w-full h-14 px-5 rounded-xl bg-surface-container-highest border-none focus:ring-2 focus:ring-primary focus:bg-surface-container-lowest transition-all placeholder:text-outline"
+                    value={formData.confirmPassword}
+                    onChange={(e) =>
+                      setFormData({
+                        ...formData,
+                        confirmPassword: e.target.value,
+                      })
+                    }
                     placeholder="••••••••"
                     type="password"
                   />
-                 
                 </div>
               </div>
               <div className="pt-2">
                 <button
-                  className="w-full h-14 primary-gradient text-white font-semibold rounded-xl hover:shadow-lg transition-all active:scale-[0.98] flex items-center justify-center gap-2"
+                  className="w-full h-14 primary-gradient text-white font-semibold rounded-xl bg-blue-950  items-center justify-center gap-2"
                   type="submit"
                 >
                   <span>Get Started</span>
@@ -199,7 +271,7 @@ export default function Signup() {
             <div className="mt-8 flex flex-col items-center gap-4">
               <p className="text-on-surface-variant text-sm">
                 Already have an account?
-                <a class="text-primary font-bold hover:underline ml-1" href="#">
+                <a class="text-primary font-bold hover:underline ml-1" href="login">
                   Sign In
                 </a>
               </p>

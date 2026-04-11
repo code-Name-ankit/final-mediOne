@@ -39,8 +39,14 @@ export default function Medicine() {
           availability,
         },
       });
+      const sortedData = res.data.data.sort((a, b) => {
+      // Agar distance numeric hai toh simple subtract karein
+      // Agar string hai (e.g., "5.2 km"), toh parseFloat ka use karein
+      return parseFloat(a.distance) - parseFloat(b.distance);
+    });
 
-      setResults(res.data.data);
+
+      setResults(sortedData);
     } catch (err) {
       console.error(err);
     }
@@ -176,7 +182,8 @@ export default function Medicine() {
           </div>
 
           <div className="flex flex-col gap-6">
-            {results.map((item, index) => (
+            {results.length > 0 ? ( 
+            results.map((item, index) => (
               <article
                 key={index}
                 className={`bg-white p-6 rounded-[2rem] shadow-xl relative group ${
@@ -239,7 +246,23 @@ export default function Medicine() {
                   </button>
                 </div>
               </article>
-            ))}
+            )) ) : (<div className="flex flex-col items-center justify-center py-20 bg-white rounded-[2rem] shadow-sm border border-dashed border-gray-300">
+      <span className="material-symbols-outlined text-gray-300 text-6xl mb-4">
+        search_off
+      </span>
+      <h3 className="text-xl font-bold text-gray-700">No Medicines Found</h3>
+      <p className="text-gray-500 text-center px-6">
+        Sorry, we couldn't find "{medicine}" within {distance}km. 
+        Try changing the filters or checking the spelling.
+      </p>
+      <button 
+        onClick={() => {setMedicine(""); setResults([]);}} 
+        className="mt-4 text-blue-600 font-bold hover:underline"
+      >
+        Clear Search
+      </button>
+    </div>
+            )}
           </div>
         </div>
 
