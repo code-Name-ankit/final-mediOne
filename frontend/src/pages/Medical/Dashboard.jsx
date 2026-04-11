@@ -3,11 +3,11 @@ import React from "react";
 const Dashboard = () => {
   return (
     <>
-      <header class="mb-10 mt-24">
-        <h2 class="text-[3.5rem] font-bold tracking-tight text-on-surface font-headline leading-[1.1] mb-2">
+      <header className="mb-10 mt-24">
+        <h2 className="text-[3.5rem] font-bold tracking-tight text-on-surface font-headline leading-[1.1] mb-2">
           Empathetic Precision
         </h2>
-        <p class="text-body-lg text-on-surface-variant max-w-2xl font-body">
+        <p className="text-body-lg text-on-surface-variant max-w-2xl font-body">
           Welcome back, Dr. Chen. Your pharmacy is running at 98% efficiency
           today. Here is your operational overview.
         </p>
@@ -219,11 +219,11 @@ const Dashboard = () => {
 
         {/* --- LOW STOCK ALERTS (1/3 Width) --- */}
         <div className="space-y-6">
-          <div class="flex items-center justify-between">
-            <h4 class="text-headline-md font-bold text-on-surface font-headline">
+          <div className="flex items-center justify-between">
+            <h4 className="text-headline-md font-bold text-on-surface font-headline">
               Low Stock Alerts
             </h4>
-            <span class="bg-error text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
+            <span className="bg-error text-white text-[10px] px-2 py-0.5 rounded-full font-bold">
               4 CRITICAL
             </span>
           </div>
@@ -259,46 +259,46 @@ const Dashboard = () => {
             </div>
 
             {/* <!-- Low Stock Item 2 --> */}
-            <div class="bg-surface-container-lowest p-5 rounded-2xl ring-1 ring-error/10 flex gap-4 items-start relative overflow-hidden group">
-              <div class="absolute left-0 top-0 bottom-0 w-1 bg-error/50"></div>
-              <div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-outline">pill</span>
+            <div className="bg-surface-container-lowest p-5 rounded-2xl ring-1 ring-error/10 flex gap-4 items-start relative overflow-hidden group">
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-error/50"></div>
+              <div className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-outline">pill</span>
               </div>
-              <div class="flex-1">
-                <div class="flex justify-between items-start mb-1">
-                  <h5 class="font-bold text-on-surface">Ventolin Inhaler</h5>
-                  <span class="text-error font-bold text-xs">
+              <div className="flex-1">
+                <div className="flex justify-between items-start mb-1">
+                  <h5 className="font-bold text-on-surface">Ventolin Inhaler</h5>
+                  <span className="text-error font-bold text-xs">
                     12 units left
                   </span>
                 </div>
-                <p class="text-xs text-on-surface-variant mb-3">
+                <p className="text-xs text-on-surface-variant mb-3">
                   Reorder threshold: 30 units
                 </p>
-                <button class="w-full py-2 bg-surface-container-high text-on-surface-variant rounded-lg text-xs font-bold hover:bg-surface-variant transition-colors">
+                <button className="w-full py-2 bg-surface-container-high text-on-surface-variant rounded-lg text-xs font-bold hover:bg-surface-variant transition-colors">
                   Add to List
                 </button>
               </div>
             </div>
 
             {/* <!-- Low Stock Item 3 --> */}
-            <div class="bg-surface-container-lowest p-5 rounded-2xl ring-1 ring-error/10 flex gap-4 items-start relative overflow-hidden group">
-              <div class="absolute left-0 top-0 bottom-0 w-1 bg-error/50"></div>
-              <div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center shrink-0">
-                <span class="material-symbols-outlined text-outline">
+            <div className="bg-surface-container-lowest p-5 rounded-2xl ring-1 ring-error/10 flex gap-4 items-start relative overflow-hidden group">
+              <div className="absolute left-0 top-0 bottom-0 w-1 bg-error/50"></div>
+              <div className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-outline">
                   vaccines
                 </span>
               </div>
-              <div class="flex-1">
-                <div class="flex justify-between items-start mb-1">
-                  <h5 class="font-bold text-on-surface">Gabapentin 300mg</h5>
-                  <span class="text-error font-bold text-xs">
+              <div className="flex-1">
+                <div className="flex justify-between items-start mb-1">
+                  <h5 className="font-bold text-on-surface">Gabapentin 300mg</h5>
+                  <span className="text-error font-bold text-xs">
                     18 units left
                   </span>
                 </div>
-                <p class="text-xs text-on-surface-variant mb-3">
+                <p className="text-xs text-on-surface-variant mb-3">
                   Reorder threshold: 50 units
                 </p>
-                <button class="w-full py-2 bg-surface-container-high text-on-surface-variant rounded-lg text-xs font-bold hover:bg-surface-variant transition-colors">
+                <button className="w-full py-2 bg-surface-container-high text-on-surface-variant rounded-lg text-xs font-bold hover:bg-surface-variant transition-colors">
                   Add to List
                 </button>
               </div>
