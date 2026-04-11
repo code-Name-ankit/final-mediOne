@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import MapView from "../User/MapView";
+const token = localStorage.getItem("token");
 
 export default function Medicine() {
   const [medicine, setMedicine] = useState("");
@@ -38,6 +39,9 @@ export default function Medicine() {
           price,
           availability,
         },
+        headers: {
+    Authorization: `Bearer ${token}`,
+  },
       });
       const sortedData = res.data.data.sort((a, b) => {
       // Agar distance numeric hai toh simple subtract karein
