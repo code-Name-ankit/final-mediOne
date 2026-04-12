@@ -1,6 +1,39 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 export default function TestBooking() {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  // --- Backend se Orders Fetch karna ---
+  useEffect(() => {
+    const fetchOrders = async () => {
+      try {
+        // Backend endpoint: Sabhi orders lene ke liye (iske liye backend pe ek GET route hona chahiye)
+        const response = await axios.get("http://localhost:5000/api/lab-orders/all");
+        if (response.data.success) {
+          setOrders(response.data.orders);
+        }
+      } catch (error) {
+        console.error("Error fetching orders:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchOrders();
+  }, []);
+
+  // Status Badge Helper Function
+  const getStatusStyle = (status) => {
+    switch (status?.toLowerCase()) {
+      case 'pending': return 'bg-amber-100 text-amber-800 border-amber-200';
+      case 'confirmed': return 'bg-blue-100 text-blue-800 border-blue-200';
+      case 'completed': return 'bg-green-100 text-green-800 border-green-200';
+      default: return 'bg-slate-100 text-slate-800 border-slate-200';
+    }
+  };
+
   return (
     <>
       {/* <!-- Header & Quick Actions --> */}
@@ -18,10 +51,10 @@ export default function TestBooking() {
             <span class="material-symbols-outlined">download</span>
             Export CSV
           </button>
-          <button class="flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white rounded-xl font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95">
+          {/* <button class="flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white rounded-xl font-semibold shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-all active:scale-95">
             <span class="material-symbols-outlined">add</span>
             New Booking
-          </button>
+          </button> */}
         </div>
       </div>
       {/* <!-- Filter Bento --> */}
@@ -94,285 +127,72 @@ export default function TestBooking() {
           </div>
         </div>
       </div>
+
+
       {/* <!-- Comprehensive Table --> */}
-      <div class="bg-surface-container-lowest rounded-3xl overflow-hidden shadow-sm border border-outline-variant/10">
-        <table class="w-full text-left border-collapse">
+     <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 mx-4">
+        <table className="w-full text-left border-collapse">
           <thead>
-            <tr class="bg-surface-container-low/50">
-              <th class="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-outline">
-                Booking ID
-              </th>
-              <th class="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-outline">
-                Patient
-              </th>
-              <th class="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-outline">
-                Test Type
-              </th>
-              <th class="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-outline">
-                Collection Address
-              </th>
-              <th class="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-outline">
-                Schedule
-              </th>
-              <th class="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-outline text-center">
-                Status
-              </th>
-              <th class="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-outline text-right">
-                Actions
-              </th>
+            <tr className="bg-slate-50">
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Booking ID</th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Lab Name</th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Test Type</th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Amount</th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Date</th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 text-center">Status</th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-surface-container-low">
-            {/* <!-- Row 1: Pending --> */}
-            <tr class="group hover:bg-surface-container-low/30 transition-colors">
-              <td class="px-6 py-6">
-                <span class="font-mono text-xs font-bold text-primary">
-                  #BK-9902
-                </span>
-              </td>
-              <td class="px-6 py-6">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-primary-fixed flex items-center justify-center text-primary font-bold text-xs">
-                    EL
-                  </div>
-                  <div>
-                    <p class="text-sm font-bold text-on-surface">
-                      Elena Lockwood
+          <tbody className="divide-y divide-slate-100">
+            {loading ? (
+              <tr><td colSpan="7" className="text-center py-10 text-slate-400">Loading orders...</td></tr>
+            ) : orders.length === 0 ? (
+              <tr><td colSpan="7" className="text-center py-10 text-slate-400">No bookings found.</td></tr>
+            ) : (
+              orders.map((order) => (
+                <tr key={order._id} className="group hover:bg-slate-50 transition-colors">
+                  <td className="px-6 py-6">
+                    <span className="font-mono text-xs font-bold text-primary">
+                      #{order._id.slice(-6).toUpperCase()}
+                    </span>
+                  </td>
+                  <td className="px-6 py-6">
+                    <p className="text-sm font-bold text-slate-800">{order.labName}</p>
+                  </td>
+                  <td className="px-6 py-6">
+                    <div className="inline-flex items-center px-2 py-1 rounded-md bg-slate-100 text-slate-600 font-medium text-xs">
+                      {order.testType}
+                    </div>
+                  </td>
+                  <td className="px-6 py-6">
+                    <p className="text-sm font-bold text-slate-800">₹{order.totalAmount}</p>
+                    <p className="text-[10px] text-slate-400">Incl. Tax</p>
+                  </td>
+                  <td className="px-6 py-6">
+                    <p className="text-xs font-bold text-slate-800">
+                      {new Date(order.createdAt).toLocaleDateString()}
                     </p>
-                    <p class="text-[10px] text-outline">F, 32 years</p>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-6">
-                <div class="inline-flex items-center px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-medium text-xs">
-                  CBC with Differential
-                </div>
-              </td>
-              <td class="px-6 py-6 max-w-[200px]">
-                <p class="text-xs text-on-surface-variant truncate">
-                  742 Evergreen Terrace, Apt 4B, Springfield
-                </p>
-              </td>
-              <td class="px-6 py-6">
-                <p class="text-xs font-bold text-on-surface">Today, 09:30 AM</p>
-                <p class="text-[10px] text-outline">Phleb: Mike Ross</p>
-              </td>
-              <td class="px-6 py-6 text-center">
-                <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider border border-amber-200">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-2"></span>
-                  Pending
-                </span>
-              </td>
-              <td class="px-6 py-6 text-right">
-                <div class="flex items-center justify-end gap-2">
-                  <button class="px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary-fixed rounded-lg transition-all">
-                    Update Status
-                  </button>
-                  <button class="p-2 text-outline hover:text-primary transition-all">
-                    <span class="material-symbols-outlined text-[18px]">
-                      visibility
-                    </span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            {/* <!-- Row 2: Sample Collected --> */}
-            <tr class="group hover:bg-surface-container-low/30 transition-colors">
-              <td class="px-6 py-6">
-                <span class="font-mono text-xs font-bold text-primary">
-                  #BK-9891
-                </span>
-              </td>
-              <td class="px-6 py-6">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-tertiary-fixed flex items-center justify-center text-tertiary font-bold text-xs">
-                    RJ
-                  </div>
-                  <div>
-                    <p class="text-sm font-bold text-on-surface">
-                      Robert J. Vance
+                    <p className="text-[10px] text-slate-400">
+                      {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </p>
-                    <p class="text-[10px] text-outline">M, 58 years</p>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-6">
-                <div class="inline-flex items-center px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-medium text-xs">
-                  COVID-19 PCR (Urgent)
-                </div>
-              </td>
-              <td class="px-6 py-6 max-w-[200px]">
-                <p class="text-xs text-on-surface-variant truncate">
-                  21 Baker Street, West End, London
-                </p>
-              </td>
-              <td class="px-6 py-6">
-                <p class="text-xs font-bold text-on-surface">Today, 07:15 AM</p>
-                <p class="text-[10px] text-outline">Phleb: Sarah Chen</p>
-              </td>
-              <td class="px-6 py-6 text-center">
-                <span class="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-[10px] font-extrabold uppercase tracking-wider border border-blue-200">
-                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500 mr-2"></span>
-                  Sample Collected
-                </span>
-              </td>
-              <td class="px-6 py-6 text-right">
-                <div class="flex items-center justify-end gap-2">
-                  <button class="px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary-fixed rounded-lg transition-all">
-                    Update Status
-                  </button>
-                  <button class="p-2 text-outline hover:text-primary transition-all">
-                    <span class="material-symbols-outlined text-[18px]">
-                      visibility
+                  </td>
+                  <td className="px-6 py-6 text-center">
+                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border ${getStatusStyle(order.status)}`}>
+                      {order.status}
                     </span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            {/* <!-- Row 3: Report Ready --> */}
-            <tr class="group hover:bg-surface-container-low/30 transition-colors">
-              <td class="px-6 py-6">
-                <span class="font-mono text-xs font-bold text-primary">
-                  #BK-9854
-                </span>
-              </td>
-              <td class="px-6 py-6">
-                <div class="flex items-center gap-3">
-                  <img
-                    class="w-8 h-8 rounded-full object-cover"
-                    data-alt="headshot of a confident young woman with glasses and professional attire in a bright office"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDvVlfQ8DhJgcZ58_nhuKwZ-2ObIVKN8sr0CTG9UHYL2JAIAA9YsZ1ZtfcAowhE58HGIlhMnDYuKuXkhZAYgWv7NoSXxYs1LADuTwgxbFRns2UxTmwUBpDYkKXmxYwpCaMkXmbDQzJSzi8IYlv8n_2ChLCc9AN4YlbBlPE-gkv9iQOqo4hcmSPK_-fpV7bnUbBD3lCZNqv4Hx5lt_mDAluKlFsqUvXftTvGqHlCNfijHODDXu6JIq9glh1gekpNrSDqS4LN4naKbBw"
-                  />
-                  <div>
-                    <p class="text-sm font-bold text-on-surface">
-                      Maya Ishikawa
-                    </p>
-                    <p class="text-[10px] text-outline">F, 26 years</p>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-6">
-                <div class="inline-flex items-center px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-medium text-xs">
-                  Thyroid Profile (T3, T4, TSH)
-                </div>
-              </td>
-              <td class="px-6 py-6 max-w-[200px]">
-                <p class="text-xs text-on-surface-variant truncate">
-                  10-12 Shibuya Crossing, Tokyo
-                </p>
-              </td>
-              <td class="px-6 py-6">
-                <p class="text-xs font-bold text-on-surface">
-                  Yesterday, 14:00 PM
-                </p>
-                <p class="text-[10px] text-outline">Lab: In-House</p>
-              </td>
-              <td class="px-6 py-6 text-center">
-                <span class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-[10px] font-extrabold uppercase tracking-wider border border-secondary/20">
-                  <span class="w-1.5 h-1.5 rounded-full bg-secondary mr-2"></span>
-                  Report Ready
-                </span>
-              </td>
-              <td class="px-6 py-6 text-right">
-                <div class="flex items-center justify-end gap-2">
-                  <button class="px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary-fixed rounded-lg transition-all">
-                    Update Status
-                  </button>
-                  <button class="p-2 text-outline hover:text-primary transition-all">
-                    <span class="material-symbols-outlined text-[18px]">
-                      visibility
-                    </span>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            {/* <!-- Row 4: Pending --> */}
-            <tr class="group hover:bg-surface-container-low/30 transition-colors">
-              <td class="px-6 py-6">
-                <span class="font-mono text-xs font-bold text-primary">
-                  #BK-9844
-                </span>
-              </td>
-              <td class="px-6 py-6">
-                <div class="flex items-center gap-3">
-                  <div class="w-8 h-8 rounded-full bg-secondary-fixed flex items-center justify-center text-on-secondary-fixed-variant font-bold text-xs">
-                    AS
-                  </div>
-                  <div>
-                    <p class="text-sm font-bold text-on-surface">Arjun Singh</p>
-                    <p class="text-[10px] text-outline">M, 45 years</p>
-                  </div>
-                </div>
-              </td>
-              <td class="px-6 py-6">
-                <div class="inline-flex items-center px-2 py-1 rounded-md bg-surface-container-high text-on-surface-variant font-medium text-xs">
-                  Vitamin D (25-OH)
-                </div>
-              </td>
-              <td class="px-6 py-6 max-w-[200px]">
-                <p class="text-xs text-on-surface-variant truncate">
-                  Sector 18, Block C, Noida
-                </p>
-              </td>
-              <td class="px-6 py-6">
-                <p class="text-xs font-bold text-on-surface">
-                  Oct 26, 08:00 AM
-                </p>
-                <p class="text-[10px] text-outline">Phleb: David G.</p>
-              </td>
-              <td class="px-6 py-6 text-center">
-                <span class="inline-flex items-center px-3 py-1 rounded-full bg-amber-100 text-amber-800 text-[10px] font-extrabold uppercase tracking-wider border border-amber-200">
-                  <span class="w-1.5 h-1.5 rounded-full bg-amber-500 mr-2"></span>
-                  Pending
-                </span>
-              </td>
-              <td class="px-6 py-6 text-right">
-                <div class="flex items-center justify-end gap-2">
-                  <button class="px-3 py-1.5 text-[11px] font-bold text-primary hover:bg-primary-fixed rounded-lg transition-all">
-                    Update Status
-                  </button>
-                  <button class="p-2 text-outline hover:text-primary transition-all">
-                    <span class="material-symbols-outlined text-[18px]">
-                      visibility
-                    </span>
-                  </button>
-                </div>
-              </td>
-            </tr>
+                  </td>
+                  <td className="px-6 py-6 text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <button className="p-2 text-slate-400 hover:text-primary transition-all">
+                        <span className="material-symbols-outlined text-[18px]">visibility</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
-        {/* <!-- Pagination --> */}
-        <div class="px-6 py-4 flex items-center justify-between bg-surface-container-low/20">
-          <p class="text-xs text-outline">
-            Showing <span class="font-bold text-on-surface">1 - 10</span> of 124
-            bookings
-          </p>
-          <div class="flex items-center gap-1">
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container text-outline">
-              <span class="material-symbols-outlined text-sm">
-                chevron_left
-              </span>
-            </button>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg bg-primary text-white text-xs font-bold shadow-sm">
-              1
-            </button>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container text-xs font-bold text-on-surface">
-              2
-            </button>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container text-xs font-bold text-on-surface">
-              3
-            </button>
-            <span class="px-1 text-outline">...</span>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container text-xs font-bold text-on-surface">
-              12
-            </button>
-            <button class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-surface-container text-outline">
-              <span class="material-symbols-outlined text-sm">
-                chevron_right
-              </span>
-            </button>
-          </div>
-        </div>
       </div>
 
       {/* <!-- Contextual FAB (Only for main action areas) --> */}

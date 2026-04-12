@@ -24,3 +24,23 @@ export const createLabOrder = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+
+// Saare orders fetch karne ke liye
+export const getAllOrders = async (req, res) => {
+  try {
+    // .sort({ createdAt: -1 }) se naye orders sabse upar dikhenge
+    const orders = await LabOrder.find().sort({ createdAt: -1 });
+    
+    res.status(200).json({
+      success: true,
+      count: orders.length,
+      orders: orders
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Server Error: Orders fetch nahi ho sake",
+      error: error.message
+    });
+  }
+};
