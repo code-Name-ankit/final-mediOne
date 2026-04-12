@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 import searchRoutess from "./routes/searchRoutess.js";
 import orderRoutes from "./routes/orderRoutes.js";
 import medicineRoutes from "./routes/medicineRoutes.js";
+import labRoutes from './routes/labRoutes.js';
 
 dotenv.config();
 
@@ -26,6 +27,8 @@ app.use("/api/auth", authRoutes);
 app.use("/api/searchh", searchRoutess);
 app.use("/api/orders", orderRoutes);
 app.use("/api/medicines", medicineRoutes);
+app.use('/api/labs', labRoutes);
+
 
 // test route
 app.get("/", (req, res) => {

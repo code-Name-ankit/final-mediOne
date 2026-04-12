@@ -5,8 +5,8 @@ const Layout = () => {
 
   const menuItems = [
     { name: 'Dashboard', path: '/laboratory', icon: 'dashboard' },
-    { name: 'Medicines', path: '/laboratory/test', icon: 'medication' },
-    { name: 'Orders', path: '/laboratory/report', icon: 'shopping_cart' },
+    { name: 'Test Booking ', path: '/laboratory/test', icon: 'medication' },
+    { name: 'Report', path: '/laboratory/report', icon: 'shopping_cart' },
     // { name: 'Inventory', path: '/laboratory/inventory', icon: 'inventory_2' },
     // { name: 'Analytics', path: '/laboratory/analytics', icon: 'analytics' },
   ];
@@ -38,7 +38,7 @@ const Layout = () => {
         </nav>
 
         {/* Bottom Links (Settings/Support) */}
-        <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800 space-y-1">
+        {/* <div className="mt-auto pt-4 border-t border-slate-200 dark:border-slate-800 space-y-1">
           <NavLink to="/pharmacy/settings" className="flex items-center gap-3 px-4 py-3 text-slate-500 hover:text-slate-900 hover:bg-slate-200 transition-colors text-sm font-medium rounded-xl">
             <span className="material-symbols-outlined">settings</span>
             Settings
@@ -47,7 +47,7 @@ const Layout = () => {
             <span className="material-symbols-outlined">help</span>
             Support
           </NavLink>
-        </div>
+        </div> */}
       </aside>
       {/* --- SIDEBAR END --- */}
 
