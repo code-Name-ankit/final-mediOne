@@ -14,6 +14,7 @@ export default function Labe() {
   // States for MapView
   const [userLocation, setUserLocation] = useState(null); 
   const [selectedLab, setSelectedLab] = useState(null);
+  
 
   const fetchLabs = async (test = "") => {
     setLoading(true);

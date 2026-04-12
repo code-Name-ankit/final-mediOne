@@ -10,7 +10,9 @@ export default function TestBooking() {
     const fetchOrders = async () => {
       try {
         // Backend endpoint: Sabhi orders lene ke liye (iske liye backend pe ek GET route hona chahiye)
-        const response = await axios.get("http://localhost:5000/api/lab-orders/all");
+        const response = await axios.get(
+          "http://localhost:5000/api/lab-orders/all",
+        );
         if (response.data.success) {
           setOrders(response.data.orders);
         }
@@ -27,10 +29,41 @@ export default function TestBooking() {
   // Status Badge Helper Function
   const getStatusStyle = (status) => {
     switch (status?.toLowerCase()) {
-      case 'pending': return 'bg-amber-100 text-amber-800 border-amber-200';
-      case 'confirmed': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'completed': return 'bg-green-100 text-green-800 border-green-200';
-      default: return 'bg-slate-100 text-slate-800 border-slate-200';
+      case "pending":
+        return "bg-amber-100 text-amber-800 border-amber-200";
+      case "confirmed":
+        return "bg-blue-100 text-blue-800 border-blue-200";
+      case "completed":
+        return "bg-green-100 text-green-800 border-green-200";
+      default:
+        return "bg-slate-100 text-slate-800 border-slate-200";
+    }
+  };
+
+  // TestBooking.jsx mein ye changes karein
+
+  const handleFileUpload = async (e, orderId) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("report", file);
+
+    try {
+      const response = await axios.post(
+        `http://localhost:5000/api/lab-orders/upload-report/${orderId}`,
+        formData,
+        { headers: { "Content-Type": "multipart/form-data" } },
+      );
+
+      if (response.data.success) {
+        alert("Report uploaded successfully!");
+        // Refresh orders list
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("Upload error:", error);
+      alert("Upload failed");
     }
   };
 
@@ -128,63 +161,114 @@ export default function TestBooking() {
         </div>
       </div>
 
-
       {/* <!-- Comprehensive Table --> */}
-     <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 mx-4">
+      <div className="bg-white rounded-3xl overflow-hidden shadow-sm border border-slate-200 mx-4">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-slate-50">
-              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Booking ID</th>
-              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Lab Name</th>
-              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Test Type</th>
-              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Amount</th>
-              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400">Date</th>
-              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 text-center">Status</th>
-              <th className="px-6 py-5 text-[10px] font-extrabold uppercase tracking-widest text-slate-400 text-right">Actions</th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase text-slate-400">
+                Booking ID
+              </th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase text-slate-400">
+                Lab Name
+              </th>
+              {/* <th className="px-6 py-5 text-[10px] font-extrabold uppercase text-slate-400">Test Type</th> */}
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase text-slate-400">
+                Amount
+              </th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase text-slate-400">
+                Date
+              </th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase text-slate-400 text-center">
+                Status
+              </th>
+              <th className="px-6 py-5 text-[10px] font-extrabold uppercase text-slate-400 text-right">
+                Actions
+              </th>
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
             {loading ? (
-              <tr><td colSpan="7" className="text-center py-10 text-slate-400">Loading orders...</td></tr>
-            ) : orders.length === 0 ? (
-              <tr><td colSpan="7" className="text-center py-10 text-slate-400">No bookings found.</td></tr>
+              <tr>
+                <td colSpan="7" className="text-center py-10">
+                  Loading orders...
+                </td>
+              </tr>
             ) : (
               orders.map((order) => (
-                <tr key={order._id} className="group hover:bg-slate-50 transition-colors">
+                <tr
+                  key={order._id}
+                  className="group hover:bg-slate-50 transition-colors"
+                >
                   <td className="px-6 py-6">
                     <span className="font-mono text-xs font-bold text-primary">
                       #{order._id.slice(-6).toUpperCase()}
                     </span>
                   </td>
-                  <td className="px-6 py-6">
-                    <p className="text-sm font-bold text-slate-800">{order.labName}</p>
+                  <td className="px-6 py-6 font-bold text-slate-800">
+                    {order.labName}
                   </td>
-                  <td className="px-6 py-6">
-                    <div className="inline-flex items-center px-2 py-1 rounded-md bg-slate-100 text-slate-600 font-medium text-xs">
-                      {order.testType}
-                    </div>
+                  {/* <td className="px-6 py-6">
+                  <span className="px-2 py-1 rounded-md bg-slate-100 text-slate-600 text-xs font-medium">{order.testType}</span>
+                </td> */}
+                  <td className="px-6 py-6 font-bold text-slate-800">
+                    ₹{order.totalAmount}
                   </td>
-                  <td className="px-6 py-6">
-                    <p className="text-sm font-bold text-slate-800">₹{order.totalAmount}</p>
-                    <p className="text-[10px] text-slate-400">Incl. Tax</p>
+                  <td className="px-6 py-6 text-xs text-slate-500">
+                    {new Date(order.createdAt).toLocaleDateString()}
                   </td>
-                  <td className="px-6 py-6">
-                    <p className="text-xs font-bold text-slate-800">
-                      {new Date(order.createdAt).toLocaleDateString()}
-                    </p>
-                    <p className="text-[10px] text-slate-400">
-                      {new Date(order.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </td>
+
                   <td className="px-6 py-6 text-center">
-                    <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase tracking-wider border ${getStatusStyle(order.status)}`}>
+                    <span
+                      className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-extrabold uppercase border ${getStatusStyle(order.status)}`}
+                    >
                       {order.status}
                     </span>
                   </td>
+
+                  {/* --- 3. IMPORTANT: Updated Actions Column --- */}
                   <td className="px-6 py-6 text-right">
-                    <div className="flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-3">
+                      {/* Hidden Input */}
+                      <input
+                        type="file"
+                        id={`upload-${order._id}`}
+                        className="hidden"
+                        onChange={(e) => handleFileUpload(e, order._id)}
+                        accept=".pdf,.jpg,.jpeg,.png"
+                      />
+
+                      {order.reportFile ? (
+                        <button
+                          onClick={() =>
+                            window.open(
+                              `http://localhost:5000/${order.reportFile}`,
+                              "_blank",
+                            )
+                          }
+                          className="flex items-center gap-1 px-3 py-1.5 text-[11px] font-bold text-green-700 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-all"
+                        >
+                          <span className="material-symbols-outlined text-sm">
+                            visibility
+                          </span>
+                          View Report
+                        </button>
+                      ) : (
+                        <label
+                          htmlFor={`upload-${order._id}`}
+                          className="cursor-pointer flex items-center gap-1 px-3 py-1.5 text-[11px] font-bold text-white bg-primary rounded-lg hover:brightness-95 transition-all shadow-md shadow-primary/20"
+                        >
+                          <span className="material-symbols-outlined text-sm">
+                            upload_file
+                          </span>
+                          Upload
+                        </label>
+                      )}
+
                       <button className="p-2 text-slate-400 hover:text-primary transition-all">
-                        <span className="material-symbols-outlined text-[18px]">visibility</span>
+                        <span className="material-symbols-outlined text-[18px]">
+                          visibility
+                        </span>
                       </button>
                     </div>
                   </td>
@@ -196,9 +280,9 @@ export default function TestBooking() {
       </div>
 
       {/* <!-- Contextual FAB (Only for main action areas) --> */}
-<button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
-<span class="material-symbols-outlined">add_task</span>
-</button>
+      <button class="fixed bottom-8 right-8 w-14 h-14 bg-primary text-white rounded-full shadow-2xl flex items-center justify-center hover:scale-110 active:scale-95 transition-all z-50">
+        <span class="material-symbols-outlined">add_task</span>
+      </button>
     </>
   );
 }
