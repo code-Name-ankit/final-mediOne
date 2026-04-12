@@ -1,7 +1,62 @@
 // src/pages/medical/Medicines.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 const Medicines = () => {
+  const [medicines, setMedicines] = useState([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+
+  // Form State
+  const [formData, setFormData] = useState({
+    name: "",
+    brand: "",
+    category: "",
+    description: "",
+  });
+
+  useEffect(() => {
+    fetchMedicines();
+  }, []);
+
+  const fetchMedicines = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/medicines");
+      setMedicines(res.data);
+      setLoading(false);
+    } catch (err) {
+      console.error(err);
+      setLoading(false);
+    }
+  };
+
+  // Handle Input Change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // 2. Submit Form to Backend
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await axios.post(
+        "http://localhost:5000/api/medicines/add",
+        formData,
+      );
+      setMedicines([res.data, ...medicines]); // UI update
+      setIsModalOpen(false); // Close Modal
+      setFormData({ name: "", brand: "", category: "", description: "" }); // Reset Form
+    } catch (err) {
+      alert("Error adding medicine");
+    }
+  };
+
+  const deleteMedicine = async (id) => {
+    if (window.confirm("Delete karein?")) {
+      await axios.delete(`http://localhost:5000/api/medicines/delete/${id}`);
+      setMedicines(medicines.filter((m) => m._id !== id));
+    }
+  };
   return (
     <>
       {/* <!-- Header Section with Asymmetry --> */}
@@ -21,12 +76,117 @@ const Medicines = () => {
             <span className="material-symbols-outlined">download</span>
             Export Report
           </button>
-          <button className="px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2">
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="px-6 py-3 bg-gradient-to-br from-primary to-primary-container text-white font-bold rounded-xl shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all flex items-center gap-2"
+          >
             <span className="material-symbols-outlined">add</span>
             Add Medicine
           </button>
         </div>
       </div>
+
+      {/* --- POPUP MODAL --- */}
+      {isModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/40 backdrop-blur-sm transition-opacity"
+            onClick={() => setIsModalOpen(false)}
+          ></div>
+
+          {/* Modal Content */}
+          <div className="relative w-full max-w-md mx-auto bg-white rounded-[2.5rem] shadow-2xl p-8 transform transition-all scale-100">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-2xl font-bold text-slate-800">
+                New Medicine
+              </h3>
+              <button
+                onClick={() => setIsModalOpen(false)}
+                className="p-2 hover:bg-slate-100 rounded-full text-slate-400 transition-colors"
+              >
+                <span className="material-symbols-outlined">close</span>
+              </button>
+            </div>
+
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 ml-1 mb-2 block">
+                  Medicine Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  required
+                  value={formData.name}
+                  onChange={handleChange}
+                  placeholder="e.g. Amoxicillin"
+                  className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/5 outline-none transition-all"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400 ml-1 mb-2 block">
+                    Brand
+                  </label>
+                  <input
+                    type="text"
+                    name="brand"
+                    value={formData.brand}
+                    onChange={handleChange}
+                    placeholder="e.g. Cipla"
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold uppercase tracking-wider text-slate-400 ml-1 mb-2 block">
+                    Category
+                  </label>
+                  <input
+                    type="text"
+                    name="category"
+                    value={formData.category}
+                    onChange={handleChange}
+                    placeholder="e.g. Antibiotic"
+                    className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider text-slate-400 ml-1 mb-2 block">
+                  Description
+                </label>
+                <textarea
+                  name="description"
+                  rows="3"
+                  value={formData.description}
+                  onChange={handleChange}
+                  placeholder="Medicine usage details..."
+                  className="w-full px-5 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:border-blue-500 focus:bg-white outline-none transition-all resize-none"
+                ></textarea>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setIsModalOpen(false)}
+                  className="flex-1 px-6 py-4 bg-slate-100 text-slate-600 font-bold rounded-2xl hover:bg-slate-200 transition-all"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-[2] px-6 py-4 bg-blue-600 text-white font-bold rounded-2xl shadow-lg shadow-blue-200 hover:bg-blue-700 transition-all"
+                >
+                  Add to Stock
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* <!-- Bento Grid Stats --> */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mt-7">
@@ -43,7 +203,9 @@ const Medicines = () => {
             </h4>
           </div>
           <p className="text-xs text-secondary flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm">trending_up</span>{" "}
+            <span className="material-symbols-outlined text-sm">
+              trending_up
+            </span>{" "}
             +12 new this month
           </p>
         </div>
@@ -55,10 +217,14 @@ const Medicines = () => {
             <p className="text-label-md font-medium text-outline uppercase tracking-wider">
               Out of Stock
             </p>
-            <h4 className="text-4xl font-headline font-bold text-on-surface">18</h4>
+            <h4 className="text-4xl font-headline font-bold text-on-surface">
+              18
+            </h4>
           </div>
           <p className="text-xs text-error flex items-center gap-1">
-            <span className="material-symbols-outlined text-sm">priority_high</span>{" "}
+            <span className="material-symbols-outlined text-sm">
+              priority_high
+            </span>{" "}
             Urgent restock needed
           </p>
         </div>
@@ -76,11 +242,15 @@ const Medicines = () => {
                 <div className="w-8 h-8 rounded-full border-2 border-primary bg-slate-400"></div>
                 <div className="w-8 h-8 rounded-full border-2 border-primary bg-slate-500"></div>
               </div>
-              <p className="text-xs text-primary-fixed">Monitored by 3 Suppliers</p>
+              <p className="text-xs text-primary-fixed">
+                Monitored by 3 Suppliers
+              </p>
             </div>
           </div>
           <div className="absolute -right-10 -bottom-10 opacity-10">
-            <span className="material-symbols-outlined text-[160px]">payments</span>
+            <span className="material-symbols-outlined text-[160px]">
+              payments
+            </span>
           </div>
         </div>
       </div>
@@ -92,12 +262,12 @@ const Medicines = () => {
             <button className="px-5 py-2 bg-blue-600 text-white rounded-full text-sm font-semibold shadow-md shadow-blue-100 transition-all">
               All Medicines
             </button>
-            <button className="px-5 py-2 text-slate-500 rounded-full text-sm font-medium hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100">
+            {/* <button className="px-5 py-2 text-slate-500 rounded-full text-sm font-medium hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100">
               Antibiotics
             </button>
             <button className="px-5 py-2 text-slate-500 rounded-full text-sm font-medium hover:bg-slate-50 transition-all border border-transparent hover:border-slate-100">
               Cardiology
-            </button>
+            </button> */}
           </div>
           <div className="flex items-center gap-2">
             <button className="p-2 text-slate-400 hover:bg-slate-50 hover:text-blue-600 rounded-lg transition-all border border-slate-100">
@@ -123,13 +293,10 @@ const Medicines = () => {
                   Category
                 </th>
                 <th className="px-6 py-4 text-[11px] uppercase tracking-widest font-bold text-slate-400">
-                  Price
+                  Brand
                 </th>
                 <th className="px-6 py-4 text-[11px] uppercase tracking-widest font-bold text-slate-400">
-                  Stock Quantity
-                </th>
-                <th className="px-6 py-4 text-[11px] uppercase tracking-widest font-bold text-slate-400">
-                  Status
+                  Stock Status
                 </th>
                 <th className="px-8 py-4 text-[11px] uppercase tracking-widest font-bold text-slate-400 text-right">
                   Actions
@@ -137,146 +304,68 @@ const Medicines = () => {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-50">
-              {/* Row 1: In Stock */}
-              <tr className="group hover:bg-slate-50/50 transition-colors">
-                <td className="px-8 py-5">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
-                      <span className="material-symbols-outlined">
-                        medication
-                      </span>
+              {medicines.map((med) => (
+                <tr
+                  key={med._id}
+                  className="group hover:bg-slate-50/50 transition-colors"
+                >
+                  <td className="px-8 py-5">
+                    <div className="flex items-center gap-4">
+                      <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center text-blue-600">
+                        <span className="material-symbols-outlined">
+                          medication
+                        </span>
+                      </div>
+                      <div>
+                        <p className="font-bold text-slate-700">{med.name}</p>
+                        <p className="text-[11px] text-slate-400 font-medium tracking-tight">
+                          {med.description
+                            ? med.description.substring(0, 30) + "..."
+                            : "No description"}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-bold text-slate-700">
-                        Amoxicillin 500mg
-                      </p>
-                      <p className="text-[11px] text-slate-400 font-medium tracking-tight">
-                        Capsule • Batch #AMX-204
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-5 text-sm font-medium text-slate-500">
-                  Antibiotics
-                </td>
-                <td className="px-6 py-5 text-sm font-bold text-slate-800">
-                  $12.45
-                </td>
-                <td className="px-6 py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div
-                        className="bg-blue-500 h-full"
-                        style={{ width: "85%" }}
-                      ></div>
-                    </div>
-                    <span className="text-sm font-bold text-slate-700">
-                      420
+                  </td>
+                  <td className="px-6 py-5">
+                    <span className="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded-full uppercase tracking-wider">
+                      {med.category || "General"}
                     </span>
-                  </div>
-                </td>
-                <td className="px-6 py-5">
-                  <span className="px-3 py-1 bg-emerald-100 text-emerald-700 text-[10px] font-bold rounded-full uppercase tracking-wider">
-                    In Stock
-                  </span>
-                </td>
-                <td className="px-8 py-5 text-right">
-                  <button className="text-slate-300 hover:text-blue-600 transition-colors">
-                    <span className="material-symbols-outlined">more_vert</span>
-                  </button>
-                </td>
-              </tr>
-
-              {/* Row 2: Low Stock */}
-              <tr className="group hover:bg-slate-50/50 transition-colors">
-                <td className="px-8 py-5">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-red-50 flex items-center justify-center text-red-500">
-                      <span className="material-symbols-outlined">
-                        medication
+                  </td>
+                  <td className="px-6 py-5 text-sm font-semibold text-slate-600">
+                    {med.brand || "Generic"}
+                  </td>
+                  <td className="px-6 py-5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-20 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                        <div
+                          className="bg-emerald-500 h-full"
+                          style={{ width: "100%" }} // Dynamic logic yahan add kar sakte hain
+                        ></div>
+                      </div>
+                      <span className="text-[10px] font-bold text-emerald-600 uppercase">
+                        Available
                       </span>
                     </div>
-                    <div>
-                      <p className="font-bold text-slate-700">
-                        Atorvastatin 20mg
-                      </p>
-                      <p className="text-[11px] text-slate-400 font-medium tracking-tight">
-                        Tablet • Batch #ATR-881
-                      </p>
+                  </td>
+                  <td className="px-8 py-5 text-right">
+                    <div className="flex justify-end gap-2">
+                      <button
+                        onClick={() => deleteMedicine(med._id)}
+                        className="p-2 text-slate-300 hover:text-red-500 hover:bg-red-50 rounded-lg transition-all"
+                      >
+                        <span className="material-symbols-outlined text-xl">
+                          delete
+                        </span>
+                      </button>
+                      <button className="p-2 text-slate-300 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-all">
+                        <span className="material-symbols-outlined text-xl">
+                          more_vert
+                        </span>
+                      </button>
                     </div>
-                  </div>
-                </td>
-                <td className="px-6 py-5 text-sm font-medium text-slate-500">
-                  Cardiology
-                </td>
-                <td className="px-6 py-5 text-sm font-bold text-slate-800">
-                  $45.00
-                </td>
-                <td className="px-6 py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div
-                        className="bg-red-500 h-full"
-                        style={{ width: "8%" }}
-                      ></div>
-                    </div>
-                    <span className="text-sm font-bold text-red-600">4</span>
-                  </div>
-                </td>
-                <td className="px-6 py-5">
-                  <span className="px-3 py-1 bg-red-100 text-red-700 text-[10px] font-bold rounded-full uppercase tracking-wider">
-                    Low Stock
-                  </span>
-                </td>
-                <td className="px-8 py-5 text-right">
-                  <button className="text-slate-300 hover:text-blue-600 transition-colors">
-                    <span className="material-symbols-outlined">more_vert</span>
-                  </button>
-                </td>
-              </tr>
-
-              {/* Row 3: Out of Stock */}
-              <tr className="group hover:bg-slate-50/50 transition-colors opacity-70">
-                <td className="px-8 py-5">
-                  <div className="flex items-center gap-4">
-                    <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-400">
-                      <span className="material-symbols-outlined">block</span>
-                    </div>
-                    <div>
-                      <p className="font-bold text-slate-400">
-                        Lisinopril 10mg
-                      </p>
-                      <p className="text-[11px] text-slate-300 font-medium">
-                        Tablet • Batch #LIS-992
-                      </p>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-5 text-sm font-medium text-slate-400">
-                  Hypertension
-                </td>
-                <td className="px-6 py-5 text-sm font-bold text-slate-400">
-                  $22.00
-                </td>
-                <td className="px-6 py-5">
-                  <div className="flex items-center gap-3">
-                    <div className="w-24 h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                      <div className="bg-slate-300 h-full w-0"></div>
-                    </div>
-                    <span className="text-sm font-bold text-slate-400">0</span>
-                  </div>
-                </td>
-                <td className="px-6 py-5">
-                  <span className="px-3 py-1 bg-slate-200 text-slate-600 text-[10px] font-bold rounded-full uppercase tracking-wider">
-                    Out of Stock
-                  </span>
-                </td>
-                <td className="px-8 py-5 text-right">
-                  <button className="text-slate-300 hover:text-blue-600 transition-colors">
-                    <span className="material-symbols-outlined">more_vert</span>
-                  </button>
-                </td>
-              </tr>
+                  </td>
+                </tr>
+              ))}
             </tbody>
           </table>
         </div>
@@ -284,8 +373,9 @@ const Medicines = () => {
         {/* Pagination Section */}
         <div className="p-6 border-t border-slate-50 flex items-center justify-between">
           <p className="text-xs text-slate-400 font-medium">
-            Showing <span className="font-bold text-slate-700">3</span> of{" "}
-            <span className="font-bold text-slate-700">1,284</span> medicines
+            Showing{" "}
+            <span className="font-bold text-slate-700">{medicines.length}</span>{" "}
+            results
           </p>
           <div className="flex items-center gap-2">
             <button className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:bg-slate-50 transition-all">
@@ -295,12 +385,6 @@ const Medicines = () => {
             </button>
             <button className="w-8 h-8 bg-blue-600 text-white rounded-lg text-xs font-bold shadow-md shadow-blue-100">
               1
-            </button>
-            <button className="w-8 h-8 text-slate-500 hover:bg-slate-50 rounded-lg text-xs font-bold transition-all">
-              2
-            </button>
-            <button className="w-8 h-8 text-slate-500 hover:bg-slate-50 rounded-lg text-xs font-bold transition-all">
-              3
             </button>
             <button className="p-2 border border-slate-200 rounded-lg text-slate-400 hover:bg-slate-50 transition-all">
               <span className="material-symbols-outlined text-base leading-none">

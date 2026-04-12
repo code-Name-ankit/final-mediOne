@@ -140,4 +140,4 @@ await StoreMedicine.insertMany([
 ]);
 
 console.log("Surat Fake Data Inserted ✅");
-process.exit();
+process.exit();w
