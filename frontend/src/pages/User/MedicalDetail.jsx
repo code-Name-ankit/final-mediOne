@@ -192,18 +192,7 @@ export default function MedicalDetail() {
                       ₹{med.price}
                     </span>
 
-                    {/* Quantity (static for now) */}
-                    <div className="flex items-center bg-gray-100 rounded-lg p-1">
-                      <button className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-white rounded-md">
-                        -
-                      </button>
-                      <span className="w-8 text-center text-sm font-bold">
-                        1
-                      </span>
-                      <button className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-white rounded-md">
-                        +
-                      </button>
-                    </div>
+                    
                   </div>
 
                   {/* Add to Cart */}
@@ -356,17 +345,24 @@ export default function MedicalDetail() {
 
               {/* Buttons */}
               <div className="mt-8 space-y-3">
-               <button
-  onClick={() => navigate("/checkout")}
-  disabled={cart.length === 0}
-  className={`w-full py-4 rounded-xl font-bold text-base shadow-lg transition-transform ${
-    cart.length > 0
-      ? "bg-gradient-to-br from-blue-600 to-blue-500 text-white hover:scale-[0.98]"
-      : "bg-gray-300 text-gray-500 cursor-not-allowed"
-  }`}
->
-  Proceed to Checkout
-</button>
+                <button
+                  onClick={() =>
+                    navigate("/checkout", {
+                      state: {
+                        cart,
+                        total,
+                      },
+                    })
+                  }
+                  disabled={cart.length === 0}
+                  className={`w-full py-4 rounded-xl font-bold text-base shadow-lg transition-transform ${
+                    cart.length > 0
+                      ? "bg-gradient-to-br from-blue-600 to-blue-500 text-white hover:scale-[0.98]"
+                      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
+                >
+                  Proceed to Checkout
+                </button>
 
                 <button
                   onClick={() => setCart([])}

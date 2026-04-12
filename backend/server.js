@@ -7,6 +7,8 @@ import cors from "cors";
 import searchRoutes from "./routes/searchRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import searchRoutess from "./routes/searchRoutess.js";
+import orderRoutes from "./routes/orderRoutes.js";
+
 dotenv.config();
 
 const app = express();
@@ -14,13 +16,14 @@ const app = express();
 // middleware
 app.use(express.json());
 app.use(cors());
-
+app.use(express.urlencoded({ extended: true }));
 
 
 
 app.use("/api/search", searchRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/searchh", searchRoutess);
+app.use("/api/orders", orderRoutes);
 
 // test route
 app.get("/", (req, res) => {
