@@ -1,14 +1,18 @@
 import React, { useState } from "react";
 import axios from "axios";
 import MapView from "../User/MapView";
+import { useNavigate } from "react-router-dom";
+
 const token = localStorage.getItem("token");
 
 export default function Medicine() {
+  const navigate = useNavigate();
+
   const [medicine, setMedicine] = useState("");
   const [results, setResults] = useState([]);
   const [location, setLocation] = useState(null);
 
-  const [distance, setDistance] = useState(5);
+  const [distance, setDistance] = useState("10000");
   const [price, setPrice] = useState("Under ₹50");
   const [availability, setAvailability] = useState("In Stock");
   const [selectedLocation, setSelectedLocation] = useState(null);
@@ -254,26 +258,26 @@ export default function Medicine() {
                       </span>
                     </div>
 
-                    {/* 🔘 Buttons */}
                     <div className="grid grid-cols-2 gap-3">
-                      <button
-                        className={`py-3 rounded-xl font-bold ${
-                          item.stock > 0
-                            ? "bg-blue-600 text-white hover:opacity-90"
-                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
-                        }`}
-                        disabled={item.stock === 0}
-                      >
-                        {item.stock > 0 ? "Order Now" : "Notify Me"}
-                      </button>
+  <button
+    onClick={() => navigate(`/medical-detail/${item.storeId}`)}
+    className={`py-3 rounded-xl font-bold ${
+      item.stock > 0
+        ? "bg-blue-600 text-white hover:opacity-90"
+        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+    }`}
+    disabled={item.stock === 0}
+  >
+    {item.stock > 0 ? "Order Now" : "Notify Me"}
+  </button>
 
-                      <button
-                        onClick={() => setSelectedLocation({ lat, lng })}
-                        className="bg-gray-200 py-3 rounded-xl font-bold hover:bg-gray-300"
-                      >
-                        View Map
-                      </button>
-                    </div>
+  <button
+    onClick={() => navigate(`/medical-detail/${item.storeId}`)}
+    className="bg-gray-200 py-3 rounded-xl font-bold hover:bg-gray-300"
+  >
+    View Details
+  </button>
+</div>
                   </article>
                 );
               })

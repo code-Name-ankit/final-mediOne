@@ -54,6 +54,7 @@ export const searchMedicine = async (req, res) => {
     // 📍 Step 3: Nearby filter
     const userLat = parseFloat(lat);
     const userLng = parseFloat(lng);
+    
 
     if (!isNaN(userLat) && !isNaN(userLng)) {
       const nearbyStores = await MedicalStore.find({

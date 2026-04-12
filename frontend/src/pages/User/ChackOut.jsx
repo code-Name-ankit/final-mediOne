@@ -3,11 +3,11 @@ import React from "react";
 export default function ChackOut() {
   return (
     <>
-      <main class="min-h-screen pt-24 pb-12 px-4 md:px-8 max-w-7xl mx-auto">
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12">
+      <main class="min-h-screen pt-24 pb-12 px-4 md:px-8 max-w-4xl mx-auto">
+        {/* <div class="grid grid-cols-1 lg:grid-cols-12 gap-12"> */}
           {/* <!-- Left Side: Order Details (Editorial Style) --> */}
-          <div class="lg:col-span-5 space-y-8">
-            <section>
+          {/* <div class="lg:col-span-5 space-y-8"> */}
+            {/* <section>
               <button class="flex items-center gap-2 text-primary font-semibold mb-6 group transition-all">
                 <span
                   class="material-symbols-outlined group-hover:-translate-x-1 transition-transform"
@@ -24,11 +24,11 @@ export default function ChackOut() {
                 Review your medical supplies before proceeding to secure
                 payment.
               </p>
-            </section>
-            <div class="bg-surface-container-low rounded-xl p-8 space-y-6">
-              <div class="space-y-4">
-                {/* <!-- Medicine Item 1 --> */}
-                <div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-xl">
+            </section> */}
+            {/* <div class="bg-surface-container-low rounded-xl p-8 space-y-6">
+              <div class="space-y-4"> */}
+            {/* <!-- Medicine Item 1 --> */}
+            {/* <div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-xl">
                   <div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-variant flex-shrink-0">
                     <img
                       class="w-full h-full object-cover"
@@ -48,9 +48,9 @@ export default function ChackOut() {
                     <span class="block font-bold text-on-surface">$12.50</span>
                     <span class="text-xs text-on-surface-variant">Qty: 2</span>
                   </div>
-                </div>
-                {/* <!-- Medicine Item 2 --> */}
-                <div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-xl">
+                </div> */}
+            {/* <!-- Medicine Item 2 --> */}
+            {/* <div class="flex items-center gap-4 bg-surface-container-lowest p-4 rounded-xl">
                   <div class="w-16 h-16 rounded-lg overflow-hidden bg-surface-variant flex-shrink-0">
                     <img
                       class="w-full h-full object-cover"
@@ -70,10 +70,10 @@ export default function ChackOut() {
                     <span class="block font-bold text-on-surface">$24.00</span>
                     <span class="text-xs text-on-surface-variant">Qty: 1</span>
                   </div>
-                </div>
-              </div>
-              {/* <!-- Summary Breakdown --> */}
-              <div class="pt-6 space-y-3">
+                </div> */}
+          {/* </div> */}
+          {/* <!-- Summary Breakdown --> */}
+          {/* <div class="pt-6 space-y-3">
                 <div class="flex justify-between items-center text-on-surface-variant">
                   <span>Subtotal</span>
                   <span class="font-medium">$49.00</span>
@@ -92,9 +92,9 @@ export default function ChackOut() {
                     $51.55
                   </span>
                 </div>
-              </div>
-              {/* <!-- Promo Code --> */}
-              <div class="pt-4">
+              </div> */}
+          {/* <!-- Promo Code --> */}
+          {/* <div class="pt-4">
                 <div class="flex gap-2">
                   <input
                     class="flex-grow bg-surface-container-highest border-none rounded-lg px-4 py-3 focus:ring-2 focus:ring-primary placeholder:text-outline outline-none"
@@ -105,8 +105,8 @@ export default function ChackOut() {
                     Apply
                   </button>
                 </div>
-              </div>
-            </div>
+              </div> */}
+          {/* </div>
             <div class="flex items-center gap-3 p-4 bg-secondary-container/20 rounded-xl">
               <span
                 class="material-symbols-outlined text-on-secondary-container"
@@ -119,7 +119,8 @@ export default function ChackOut() {
                 pharmacists.
               </p>
             </div>
-          </div>
+          </div> */}
+
           {/* <!-- Right Side: Checkout Form (Structured & Clean) --> */}
           <div class="lg:col-span-7">
             <div class="bg-surface-container-lowest premium-shadow rounded-xl p-8 md:p-12">
@@ -323,7 +324,7 @@ export default function ChackOut() {
               </form>
             </div>
           </div>
-        </div>
+        {/* </div> */}
       </main>
     </>
   );

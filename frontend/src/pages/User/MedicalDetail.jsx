@@ -1,6 +1,47 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function MedicalDetail() {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [data, setData] = useState(null);
+  const [cart, setCart] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:5000/api/searchh/${id}`);
+        setData(res.data);
+        console.log(res.data.store.name);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchData();
+  }, [id]);
+
+  const handleAddToCart = (med) => {
+    setCart((prev) => {
+      const existing = prev.find((item) => item.medicineId === med.medicineId);
+
+      if (existing) {
+        // quantity increase
+        return prev.map((item) =>
+          item.medicineId === med.medicineId
+            ? { ...item, quantity: item.quantity + 1 }
+            : item,
+        );
+      } else {
+        return [...prev, { ...med, quantity: 1 }];
+      }
+    });
+  };
+
+  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
   return (
     <>
       <main class="pt-24 pb-32 max-w-[1440px] mx-auto px-8">
@@ -30,7 +71,7 @@ export default function MedicalDetail() {
                 </span>
               </div>
               <h1 class="text-4xl font-extrabold tracking-tight mb-2">
-                City Center Pharmacy
+                {data?.store?.name}
               </h1>
               <div class="flex items-center gap-4 text-sm opacity-90">
                 <div class="flex items-center gap-1">
@@ -48,17 +89,18 @@ export default function MedicalDetail() {
                   <span class="material-symbols-outlined text-base">
                     location_on
                   </span>
-                  123 Health Ave, Medical District
+                  {data?.store?.address}
                 </div>
-                <span class="opacity-40">|</span>
+                {/* <span class="opacity-40">|</span>
                 <div class="flex items-center gap-1">
                   <span class="material-symbols-outlined text-base">
                     near_me
                   </span>
                   0.8 km away
-                </div>
+                </div> */}
               </div>
             </div>
+
             <div class="absolute bottom-8 right-8 flex gap-3">
               <button class="bg-white text-primary font-bold px-6 py-3 rounded-xl flex items-center gap-2 shadow-lg hover:bg-surface-container-lowest transition-colors">
                 <span class="material-symbols-outlined">call</span>
@@ -71,6 +113,7 @@ export default function MedicalDetail() {
             </div>
           </div>
         </header>
+
         {/* <!-- Main Content Split Layout --> */}
         <div class="flex flex-col lg:flex-row gap-8">
           {/* <!-- Left Side: Medicine Catalog --> */}
@@ -107,200 +150,238 @@ export default function MedicalDetail() {
                 </button>
               </div>
             </div>
+
             {/* Grid of Medicine Cards */}
-            <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
-              {/* Paracetamol */}
-              <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm group hover:shadow-md transition-shadow">
-                <div class="h-40 rounded-lg overflow-hidden mb-4 bg-surface-container-low relative">
-                  <img
-                    alt="Paracetamol"
-                    class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform"
-                    data-alt="white box of paracetamol pills on a clinical background with soft lighting"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuD61u_MUzypk29cZm-ep05hsOQvHku42EfjweBMfCI2uB2cDmTJyMVxPL9XrFnSGt3vVJgwbXOQPaRzHlxoXVaAF98qzsAhmAXifaF2KTjb77j2uryzbu3H6WQrbDu1CWNZvQ5dY9xJBHk1V9WDSHfbEDJCKAS2lrzrR4pAbBSuajgRbANBOBPONU3Ptp1WJPUls1yWhjfPFxANARZ8tRQ55EXAbmQq5nlyETJQY90Ww1DU_qGPOcpI4O000WGQs2kRuaYc-6VUZkI"
-                  />
-                  <span class="absolute top-2 right-2 bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-1 rounded">
-                    IN STOCK
-                  </span>
-                </div>
-                <h3 class="text-lg font-bold text-on-surface mb-1">
-                  Paracetamol 500mg
-                </h3>
-                <p class="text-xs text-on-surface-variant mb-4">
-                  Relief for fever and pain. 20 Tablets.
-                </p>
-                <div class="flex items-center justify-between mt-auto">
-                  <span class="text-xl font-bold text-primary">$4.50</span>
-                  <div class="flex items-center bg-surface-container-low rounded-lg p-1">
-                    <button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-white rounded-md">
-                      -
-                    </button>
-                    <span class="w-8 text-center text-sm font-bold">1</span>
-                    <button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-white rounded-md">
-                      +
-                    </button>
+            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
+              {data?.medicines?.map((med, index) => (
+                <div
+                  key={med.medicineId}
+                  className="bg-white rounded-xl p-4 shadow-sm group hover:shadow-md transition-shadow"
+                >
+                  {/* Image */}
+                  <div className="h-40 rounded-lg overflow-hidden mb-4 bg-gray-100 relative flex items-center justify-center">
+                    <img
+                      alt={med.name}
+                      className="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform"
+                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuD61u_MUzypk29cZm-ep05hsOQvHku42EfjweBMfCI2uB2cDmTJyMVxPL9XrFnSGt3vVJgwbXOQPaRzHlxoXVaAF98qzsAhmAXifaF2KTjb77j2uryzbu3H6WQrbDu1CWNZvQ5dY9xJBHk1V9WDSHfbEDJCKAS2lrzrR4pAbBSuajgRbANBOBPONU3Ptp1WJPUls1yWhjfPFxANARZ8tRQ55EXAbmQq5nlyETJQY90Ww1DU_qGPOcpI4O000WGQs2kRuaYc-6VUZkI"
+                    />
+
+                    {/* Stock Badge */}
+                    <span
+                      className={`absolute top-2 right-2 text-[10px] font-bold px-2 py-1 rounded ${
+                        med.stock > 0
+                          ? "bg-green-100 text-green-600"
+                          : "bg-red-100 text-red-600"
+                      }`}
+                    >
+                      {med.stock > 0 ? "IN STOCK" : "OUT OF STOCK"}
+                    </span>
                   </div>
-                </div>
-                <button class="w-full mt-4 bg-primary text-white py-3 rounded-xl font-bold text-sm hover:opacity-95 flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-sm">
-                    add_shopping_cart
-                  </span>
-                  Add to Cart
-                </button>
-              </div>
-              {/* Metformin */}
-              <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm group hover:shadow-md transition-shadow">
-                <div class="h-40 rounded-lg overflow-hidden mb-4 bg-surface-container-low relative">
-                  <img
-                    alt="Metformin"
-                    class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform"
-                    data-alt="medical prescription tablets in aluminum blister pack blue medicine theme"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuAE5PWbOv_-h-wNuZ1F7N02RWO-4doess7km5wcurkgZt3ZcGnA5CV5apt1DSIeEUxFapofh5kQ-8Z02w3ic7ZQwDchYW_MIY5z_F5vomNuf5Jro7fq5TxnYc3GHsi3R1VPHBnhJwepsAqIrZUcYxCRO0EPNSpNbGE4eyb8cjshTfTmvsznRl0UEy3pOYppW-Xk0eL_jjaYczYaXd6s0-P-SlHRSaVakEFWxtL7nUXW_4UiRehKEQrNn1AqDSYoqp4_WXGeYqy25vY"
-                  />
-                  <span class="absolute top-2 right-2 bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-1 rounded">
-                    IN STOCK
-                  </span>
-                </div>
-                <h3 class="text-lg font-bold text-on-surface mb-1">
-                  Metformin HCl
-                </h3>
-                <p class="text-xs text-on-surface-variant mb-4">
-                  Diabetes management. 500mg, 60 Tabs.
-                </p>
-                <div class="flex items-center justify-between mt-auto">
-                  <span class="text-xl font-bold text-primary">$12.90</span>
-                  <div class="flex items-center bg-surface-container-low rounded-lg p-1">
-                    <button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-white rounded-md">
-                      -
-                    </button>
-                    <span class="w-8 text-center text-sm font-bold">1</span>
-                    <button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-white rounded-md">
-                      +
-                    </button>
+
+                  {/* Name */}
+                  <h3 className="text-lg font-bold mb-1">{med.name}</h3>
+
+                  {/* Brand */}
+                  <p className="text-xs text-gray-500 mb-4">
+                    Brand: {med.brand}
+                  </p>
+
+                  {/* Price + Quantity */}
+                  <div className="flex items-center justify-between">
+                    <span className="text-xl font-bold text-blue-600">
+                      ₹{med.price}
+                    </span>
+
+                    {/* Quantity (static for now) */}
+                    <div className="flex items-center bg-gray-100 rounded-lg p-1">
+                      <button className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-white rounded-md">
+                        -
+                      </button>
+                      <span className="w-8 text-center text-sm font-bold">
+                        1
+                      </span>
+                      <button className="w-8 h-8 flex items-center justify-center text-blue-600 hover:bg-white rounded-md">
+                        +
+                      </button>
+                    </div>
                   </div>
+
+                  {/* Add to Cart */}
+                  <button
+                    onClick={() => handleAddToCart(med)}
+                    className={`w-full mt-4 py-3 rounded-xl font-bold text-sm flex items-center justify-center gap-2 ${
+                      med.stock > 0
+                        ? "bg-blue-600 text-white hover:opacity-90"
+                        : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                    }`}
+                    disabled={med.stock === 0}
+                  >
+                    <span className="material-symbols-outlined text-sm">
+                      add_shopping_cart
+                    </span>
+                    {med.stock > 0 ? "Add to Cart" : "Out of Stock"}
+                  </button>
                 </div>
-                <button class="w-full mt-4 bg-primary text-white py-3 rounded-xl font-bold text-sm hover:opacity-95 flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-sm">
-                    add_shopping_cart
-                  </span>
-                  Add to Cart
-                </button>
-              </div>
-              {/* Vitamin C */}
-              <div class="bg-surface-container-lowest rounded-xl p-4 shadow-sm group hover:shadow-md transition-shadow">
-                <div class="h-40 rounded-lg overflow-hidden mb-4 bg-surface-container-low relative">
-                  <img
-                    alt="Vitamin C"
-                    class="w-full h-full object-contain p-4 group-hover:scale-110 transition-transform"
-                    data-alt="bright orange vitamin bottles and effervescent tablets wellness and health focus"
-                    src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYNTtU-3DC3vzbhe8S8CAUBbyCSsFgBVSLPmdPn-_gbfAD0eJ8ZgrGtSqdhB46d_igNU65lRPeAJ1Aw8xJcqUTrWFtudFyaxwc2mvXPecCRJgfcYBYPyLKZptL0YVZJaZ1YnE8Ai3VJ-5VsGPhaWVd3h9PuZxhBigz5X-ZBhXPhwOQF28XATdYVENzzfQvG8B_F2FtNWYyW-sDibmJpDYdub325HznVjEcy26hFYs0X50y9-YQhDNiy-fa83NJt_cRvUWieSYKjoo"
-                  />
-                  <span class="absolute top-2 right-2 bg-secondary/10 text-secondary text-[10px] font-bold px-2 py-1 rounded">
-                    IN STOCK
-                  </span>
-                </div>
-                <h3 class="text-lg font-bold text-on-surface mb-1">
-                  Vitamin C Boost
-                </h3>
-                <p class="text-xs text-on-surface-variant mb-4">
-                  Immune support. 1000mg Effervescent.
-                </p>
-                <div class="flex items-center justify-between mt-auto">
-                  <span class="text-xl font-bold text-primary">$8.25</span>
-                  <div class="flex items-center bg-surface-container-low rounded-lg p-1">
-                    <button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-white rounded-md">
-                      -
-                    </button>
-                    <span class="w-8 text-center text-sm font-bold">2</span>
-                    <button class="w-8 h-8 flex items-center justify-center text-primary hover:bg-white rounded-md">
-                      +
-                    </button>
-                  </div>
-                </div>
-                <button class="w-full mt-4 bg-primary text-white py-3 rounded-xl font-bold text-sm hover:opacity-95 flex items-center justify-center gap-2">
-                  <span class="material-symbols-outlined text-sm">
-                    add_shopping_cart
-                  </span>
-                  Add to Cart
-                </button>
-              </div>
+              ))}
             </div>
           </div>
           {/* <!-- Right Side: Sticky Cart Summary --> */}
-          <div class="lg:w-1/3">
-            <div class="sticky top-24 bg-surface-container-lowest rounded-3xl p-6 shadow-xl border border-outline-variant/15">
-              <div class="flex items-center justify-between mb-6">
-                <h2 class="text-xl font-extrabold tracking-tight">Your Cart</h2>
-                <span class="bg-primary-fixed text-on-primary-fixed text-xs font-bold px-2 py-1 rounded-md">
-                  2 ITEMS
+          <div className="lg:w-1/3">
+            <div className="sticky top-24 bg-white rounded-3xl p-6 shadow-xl border border-gray-200">
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="text-xl font-extrabold tracking-tight">
+                  Your Cart
+                </h2>
+
+                <span className="bg-blue-100 text-blue-600 text-xs font-bold px-2 py-1 rounded-md">
+                  {cart.length} ITEMS
                 </span>
               </div>
-              <div class="space-y-4 mb-8">
-                <div class="flex items-center gap-4 group">
-                  <div class="w-12 h-12 bg-surface-container-low rounded-lg p-2">
-                    <img
-                      alt="Small thumb"
-                      class="w-full h-full object-contain"
-                      data-alt="medicine packaging detail"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuCk0F1WiZd3chf2qgNhyTNEr8if-ssa4v48auxIyp9QZkHAxYPL-Fq-qjdSZTKrnQpDAWN1G8Cw-ZsM93LbrQyvQOFrdTgI63hC7wIcARRN2n6DQ-wyEYNxqDlTx0xvyZpcRl6g3c7JPYdzxT4gwn5yRFGTa1XL0-bFxV9oMa1s0T--jfDWaFWciQPHO1_V36WMfbKG63zv7pccRaGNjYrpsOfZWS2Zz3kQGgmsZ0c1o4g-_Ui9NxZ41AOkJSsdoj0Rj6TZw6cbHD4"
-                    />
-                  </div>
-                  <div class="flex-grow">
-                    <h4 class="text-sm font-bold">Paracetamol 500mg</h4>
-                    <p class="text-xs text-on-surface-variant">1 x $4.50</p>
-                  </div>
-                  <button class="text-outline hover:text-error transition-colors">
-                    <span class="material-symbols-outlined text-lg">
-                      delete
-                    </span>
-                  </button>
-                </div>
-                <div class="flex items-center gap-4 group">
-                  <div class="w-12 h-12 bg-surface-container-low rounded-lg p-2">
-                    <img
-                      alt="Small thumb"
-                      class="w-full h-full object-contain"
-                      data-alt="wellness product detail"
-                      src="https://lh3.googleusercontent.com/aida-public/AB6AXuDa3QcvLn9VTyxS7K3qrEEfjnfrgNrELr9qWFd9CYCI8eJK9YxB9bJ_ouD33U7o9BXVWM5iweWL7Y4BeKt-6Ah3_aUUZ25i1RvV63O0ebrZqKfG1JsFIGdQEVb9GguWloLnZgKEFMj6Ctw2cY-DeqTMwIfnALH66gf0jF8dRc9rwYguaRkuIbOUkBp7h2jA69yemJ2CmICEaGqzC_HJVPQlDZIJnyM3a6AjOZy2xEvskakpSjT_EHgMYKZE8_YzLr0ssjEEuOUpUX4"
-                    />
-                  </div>
-                  <div class="flex-grow">
-                    <h4 class="text-sm font-bold">Vitamin C Boost</h4>
-                    <p class="text-xs text-on-surface-variant">2 x $8.25</p>
-                  </div>
-                  <button class="text-outline hover:text-error transition-colors">
-                    <span class="material-symbols-outlined text-lg">
-                      delete
-                    </span>
-                  </button>
-                </div>
+
+              {/* Cart Items */}
+              <div className="space-y-4 mb-8">
+                {cart.length > 0 ? (
+                  cart.map((item) => (
+                    <div
+                      key={item.medicineId}
+                      className="flex items-center gap-4 group"
+                    >
+                      {/* Image */}
+                      <div className="w-12 h-12 bg-gray-100 rounded-lg p-2">
+                        <img
+                          className="w-full h-full object-contain"
+                          src="https://cdn-icons-png.flaticon.com/512/2966/2966483.png"
+                        />
+                      </div>
+
+                      {/* Info */}
+                      <div className="flex-grow">
+                        <h4 className="text-sm font-bold">{item.name}</h4>
+
+                        <p className="text-xs text-gray-500">
+                          ₹{item.price} each
+                        </p>
+
+                        {/* ✅ Quantity Controls */}
+                        <div className="flex items-center gap-2 mt-1">
+                          {/* ➖ Decrease */}
+                          <button
+                            onClick={() =>
+                              setCart((prev) =>
+                                prev.map((c) =>
+                                  c.medicineId === item.medicineId
+                                    ? {
+                                        ...c,
+                                        quantity:
+                                          c.quantity > 1 ? c.quantity - 1 : 1,
+                                      }
+                                    : c,
+                                ),
+                              )
+                            }
+                            className="w-6 h-6 bg-gray-200 rounded hover:bg-gray-300"
+                          >
+                            -
+                          </button>
+
+                          {/* Qty */}
+                          <span className="text-sm font-bold">
+                            {item.quantity}
+                          </span>
+
+                          {/* ➕ Increase */}
+                          <button
+                            onClick={() =>
+                              setCart((prev) =>
+                                prev.map((c) =>
+                                  c.medicineId === item.medicineId
+                                    ? {
+                                        ...c,
+                                        quantity:
+                                          c.quantity < item.stock
+                                            ? c.quantity + 1
+                                            : c.quantity,
+                                      }
+                                    : c,
+                                ),
+                              )
+                            }
+                            className="w-6 h-6 bg-gray-200 rounded hover:bg-gray-300"
+                          >
+                            +
+                          </button>
+                        </div>
+                      </div>
+
+                      {/* Delete */}
+                      <button
+                        onClick={() =>
+                          setCart((prev) =>
+                            prev.filter(
+                              (c) => c.medicineId !== item.medicineId,
+                            ),
+                          )
+                        }
+                        className="text-gray-400 hover:text-red-500"
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          delete
+                        </span>
+                      </button>
+                    </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">Cart is empty</p>
+                )}
               </div>
-              <div class="border-t border-outline-variant/20 pt-6 space-y-3">
-                <div class="flex justify-between text-sm text-on-surface-variant">
+
+              {/* Totals */}
+              <div className="border-t pt-6 space-y-3">
+                <div className="flex justify-between text-sm text-gray-500">
                   <span>Subtotal</span>
-                  <span class="font-medium">$21.00</span>
+                  <span className="font-medium">₹{total}</span>
                 </div>
-                <div class="flex justify-between text-sm text-on-surface-variant">
+
+                <div className="flex justify-between text-sm text-gray-500">
                   <span>Delivery Fee</span>
-                  <span class="font-medium text-secondary">FREE</span>
+                  <span className="font-medium text-green-600">FREE</span>
                 </div>
-                <div class="flex justify-between text-lg font-extrabold pt-2">
+
+                <div className="flex justify-between text-lg font-extrabold pt-2">
                   <span>Total</span>
-                  <span class="text-primary">$21.00</span>
+                  <span className="text-blue-600">₹{total}</span>
                 </div>
               </div>
-              <div class="mt-8 space-y-3">
-                <button class="w-full bg-gradient-to-br from-primary to-primary-container text-white py-4 rounded-xl font-bold text-base shadow-lg shadow-primary/20 hover:scale-[0.98] transition-transform">
-                  Proceed to Checkout
-                </button>
-                <button class="w-full text-on-surface-variant text-sm font-semibold py-2 hover:text-primary transition-colors">
+
+              {/* Buttons */}
+              <div className="mt-8 space-y-3">
+               <button
+  onClick={() => navigate("/checkout")}
+  disabled={cart.length === 0}
+  className={`w-full py-4 rounded-xl font-bold text-base shadow-lg transition-transform ${
+    cart.length > 0
+      ? "bg-gradient-to-br from-blue-600 to-blue-500 text-white hover:scale-[0.98]"
+      : "bg-gray-300 text-gray-500 cursor-not-allowed"
+  }`}
+>
+  Proceed to Checkout
+</button>
+
+                <button
+                  onClick={() => setCart([])}
+                  className="w-full text-gray-500 text-sm font-semibold py-2 hover:text-blue-600"
+                >
                   Clear Cart
                 </button>
               </div>
-              <div class="mt-6 flex items-start gap-3 p-4 bg-surface-container-low rounded-2xl">
-                <span class="material-symbols-outlined text-primary text-xl">
+
+              {/* Info Box */}
+              <div className="mt-6 flex items-start gap-3 p-4 bg-gray-100 rounded-2xl">
+                <span className="material-symbols-outlined text-blue-600 text-xl">
                   info
                 </span>
-                <p class="text-[11px] text-on-surface-variant leading-relaxed">
+                <p className="text-[11px] text-gray-500 leading-relaxed">
                   Prescription medicines require a digital upload of your
                   doctor's note during checkout.
                 </p>

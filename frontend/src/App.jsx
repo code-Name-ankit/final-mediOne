@@ -42,6 +42,7 @@ import Provider from "./pages/admin/Provider";
 import User from "./pages/admin/User";
 
 function App() {
+  
   return (
     <BrowserRouter>
       {/* Navbar always visible */}
@@ -55,7 +56,8 @@ function App() {
         <Route path="/about" element={<About />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/medical-detail" element={<MedicalDetail />} />
+        {/* <Route path="/medical-detail" element={<MedicalDetail />} /> */}
+         <Route path="/medical-detail/:id" element={<MedicalDetail />} />
         <Route path="/checkout" element={<ChackOut />} />
         <Route path="/order-success" element={<OrderSuccess />} />
 
