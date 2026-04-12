@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 
-// 🔴 User Icon (RED)
+// 🔴 User Icon
 const userIcon = L.divIcon({
   className: "",
   html: `
@@ -34,7 +34,7 @@ const userIcon = L.divIcon({
   iconSize: [20, 20],
 });
 
-// 🟢 Pharmacy Icon (GREEN)
+// 🟢 Pharmacy Icon
 const pharmacyIcon = L.divIcon({
   className: "",
   html: `
@@ -65,8 +65,8 @@ const MapView = ({ results, location, selectedLocation }) => {
         selectedLocation
           ? [selectedLocation.lat, selectedLocation.lng]
           : location
-            ? [location.lat, location.lng]
-            : [21.1702, 72.8311] // Surat default
+          ? [location.lat, location.lng]
+          : [21.1702, 72.8311]
       }
       zoom={selectedLocation ? 16 : 13}
       style={{ height: "100%", width: "100%" }}
@@ -75,7 +75,7 @@ const MapView = ({ results, location, selectedLocation }) => {
       {/* 🌍 Map */}
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
-      {/* 🔴 USER LOCATION */}
+      {/* 🔴 USER */}
       {location && (
         <Marker position={[location.lat, location.lng]} icon={userIcon}>
           <Popup>
@@ -84,43 +84,57 @@ const MapView = ({ results, location, selectedLocation }) => {
         </Marker>
       )}
 
-      {/* 🟢 PHARMACY MARKERS */}
-      {results.map((item, index) => (
-        <Marker
-          key={index}
-          position={[item.location.lat, item.location.lng]}
-          icon={pharmacyIcon}
-        >
-          <Popup>
-            <div className="w-48">
-              {/* Title */}
-              <h3 className="text-sm font-bold text-gray-800">
-                {item.pharmacyName}
-              </h3>
+      {/* 🟢 STORES */}
+      {results.map((item, index) => {
+        const lat = item.location?.coordinates?.[1];
+        const lng = item.location?.coordinates?.[0];
 
-              {/* Distance */}
-              <p className="text-xs text-gray-500 mb-2">{item.distance} away</p>
+        if (!lat || !lng) return null;
 
-              {/* Price */}
-              <div className="flex justify-between items-center mb-2">
-                <span className="text-green-600 font-bold">₹{item.price}</span>
+        return (
+          <Marker key={index} position={[lat, lng]} icon={pharmacyIcon}>
+            <Popup>
+              <div className="w-48">
+                {/* ✅ Store Name */}
+                <h3 className="text-sm font-bold text-gray-800">
+                  {item.storeName}
+                </h3>
 
-                <span className="text-xs bg-green-100 text-green-600 px-2 py-0.5 rounded-full">
-                  In Stock
-                </span>
+                {/* ✅ Medicine */}
+                <p className="text-xs text-gray-500 mb-2">
+                  {item.medicineName}
+                </p>
+
+                {/* ✅ Price */}
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-green-600 font-bold">
+                    ₹{item.price}
+                  </span>
+
+                  {/* ✅ Stock */}
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full ${
+                      item.stock > 0
+                        ? "bg-green-100 text-green-600"
+                        : "bg-red-100 text-red-600"
+                    }`}
+                  >
+                    {item.stock > 0 ? "In Stock" : "Out"}
+                  </span>
+                </div>
+
+                {/* 🔘 Button */}
+                <button
+                  onClick={() => alert("Open details page")}
+                  className="w-full bg-blue-600 text-white text-xs py-1.5 rounded-lg font-bold hover:bg-blue-700"
+                >
+                  View Details
+                </button>
               </div>
-
-              {/* Button */}
-              <button
-                onClick={() => alert("Open details page")}
-                className="w-full bg-blue-600 text-white text-xs py-1.5 rounded-lg font-bold hover:bg-blue-700"
-              >
-                View Details
-              </button>
-            </div>
-          </Popup>
-        </Marker>
-      ))}
+            </Popup>
+          </Marker>
+        );
+      })}
     </MapContainer>
   );
 };

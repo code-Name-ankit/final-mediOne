@@ -30,27 +30,26 @@ export default function Medicine() {
     }
 
     try {
-      const res = await axios.get("http://localhost:5000/api/search", {
+      const res = await axios.get("http://localhost:5000/api/searchh", {
         params: {
-          medicine,
+          name: medicine,
           lat: location.lat,
           lng: location.lng,
-          distance,
-          price,
-          availability,
+          distance
         },
         headers: {
-    Authorization: `Bearer ${token}`,
-  },
+          Authorization: `Bearer ${token}`,
+        },
       });
-      const sortedData = res.data.data.sort((a, b) => {
-      // Agar distance numeric hai toh simple subtract karein
-      // Agar string hai (e.g., "5.2 km"), toh parseFloat ka use karein
-      return parseFloat(a.distance) - parseFloat(b.distance);
-    });
+      // console.log(res.data);
+      // const sortedData = res.data.sort((a, b) => {
+      //   // Agar distance numeric hai toh simple subtract karein
+      //   // Agar string hai (e.g., "5.2 km"), toh parseFloat ka use karein
+      //   return parseFloat(a.distance) - parseFloat(b.distance);
+      // });
 
-
-      setResults(sortedData);
+      setResults(res.data);
+      // console.log("Sorted Results:", res.data);
     } catch (err) {
       console.error(err);
     }
@@ -118,9 +117,9 @@ export default function Medicine() {
                 onChange={(e) => setDistance(e.target.value)}
                 className="bg-transparent border-none focus:ring-0 text-primary p-0 text-sm font-bold"
               >
-                <option value="1">1km</option>
-                <option value="5">5km</option>
-                <option value="10">10km</option>
+                <option value="1000">1km</option>
+                <option value="5000">5km</option>
+                <option value="10000">10km</option>
               </select>
             </div>
 
@@ -186,86 +185,102 @@ export default function Medicine() {
           </div>
 
           <div className="flex flex-col gap-6">
-            {results.length > 0 ? ( 
-            results.map((item, index) => (
-              <article
-                key={index}
-                className={`bg-white p-6 rounded-[2rem] shadow-xl relative group ${
-                  index === 0 ? "border-2 border-blue-200" : ""
-                }`}
-              >
-                {/* ❤️ Icon */}
-                <button className="absolute top-6 right-6 text-blue-600 hover:scale-110 transition">
-                  <span className="material-symbols-outlined">favorite</span>
-                </button>
+            {results.length > 0 ? (
+              results.map((item, index) => {
+                const lat = item.location?.coordinates?.[1];
+                const lng = item.location?.coordinates?.[0];
 
-                {/* 🏥 Header */}
-                <div className="flex gap-4 mb-4">
-                  <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center">
-                    <span className="material-symbols-outlined text-blue-600 text-3xl">
-                      local_pharmacy
-                    </span>
-                  </div>
-
-                  <div>
-                    <h3 className="text-xl font-bold">{item.pharmacyName}</h3>
-
-                    <p className="text-sm text-gray-500 flex items-center gap-1">
-                      <span className="material-symbols-outlined text-[16px]">
-                        map
-                      </span>
-                      {item.distance} away
-                    </p>
-                  </div>
-                </div>
-
-                {/* 💊 Price + Stock */}
-                <div className="flex justify-between items-center mb-6">
-                  <div>
-                    <span className="text-2xl font-bold">₹{item.price}</span>
-                    <p className="text-xs text-gray-400">{item.medicine}</p>
-                  </div>
-
-                  <span className="bg-green-100 text-green-600 text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1">
-                    <span className="w-2 h-2 bg-green-500 rounded-full"></span>
-                    In Stock
-                  </span>
-                </div>
-
-                {/* 🔘 Buttons */}
-                <div className="grid grid-cols-2 gap-3">
-                  <button className="bg-blue-600 text-white py-3 rounded-xl font-bold">
-                    Order Now
-                  </button>
-                  <button
-                    onClick={() =>
-                      setSelectedLocation({
-                        lat: item.location.lat,
-                        lng: item.location.lng,
-                      })
-                    }
-                    className="bg-gray-200 py-3 rounded-xl font-bold"
+                return (
+                  <article
+                    key={index}
+                    className={`p-6 rounded-[2rem] relative group transition-all ${
+                      index === 0
+                        ? "bg-white shadow-xl border-2 border-blue-200"
+                        : "bg-white hover:shadow-lg border border-transparent"
+                    }`}
                   >
-                    View Details
-                  </button>
-                </div>
-              </article>
-            )) ) : (<div className="flex flex-col items-center justify-center py-20 bg-white rounded-[2rem] shadow-sm border border-dashed border-gray-300">
-      <span className="material-symbols-outlined text-gray-300 text-6xl mb-4">
-        search_off
-      </span>
-      <h3 className="text-xl font-bold text-gray-700">No Medicines Found</h3>
-      <p className="text-gray-500 text-center px-6">
-        Sorry, we couldn't find "{medicine}" within {distance}km. 
-        Try changing the filters or checking the spelling.
-      </p>
-      <button 
-        onClick={() => {setMedicine(""); setResults([]);}} 
-        className="mt-4 text-blue-600 font-bold hover:underline"
-      >
-        Clear Search
-      </button>
-    </div>
+                    {/* ❤️ Favorite */}
+                    <button className="absolute top-6 right-6 text-gray-400 hover:text-red-500">
+                      <span className="material-symbols-outlined">
+                        favorite
+                      </span>
+                    </button>
+
+                    {/* 🏥 Header */}
+                    <div className="flex gap-4 mb-4">
+                      <div className="w-16 h-16 rounded-2xl bg-blue-100 flex items-center justify-center">
+                        <span className="material-symbols-outlined text-blue-600 text-3xl">
+                          local_pharmacy
+                        </span>
+                      </div>
+
+                      <div>
+                        <h3 className="text-xl font-bold">{item.storeName}</h3>
+
+                        {/* 📍 Distance */}
+                        <p className="text-sm text-gray-500 flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[16px]">
+                            map
+                          </span>
+                          {item.distance} away
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* 💰 Price + Stock */}
+                    <div className="flex justify-between items-center mb-6">
+                      <div className="flex flex-col">
+                        <span className="text-2xl font-bold">
+                          ₹{item.price}
+                        </span>
+                        <span className="text-xs text-gray-400">
+                          {item.medicineName}
+                        </span>
+                      </div>
+
+                      <span
+                        className={`text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1 ${
+                          item.stock > 0
+                            ? "bg-green-100 text-green-600"
+                            : "bg-red-100 text-red-600"
+                        }`}
+                      >
+                        <span
+                          className={`w-2 h-2 rounded-full ${
+                            item.stock > 0 ? "bg-green-500" : "bg-red-500"
+                          }`}
+                        ></span>
+                        {item.stock > 0 ? "In Stock" : "Out of Stock"}
+                      </span>
+                    </div>
+
+                    {/* 🔘 Buttons */}
+                    <div className="grid grid-cols-2 gap-3">
+                      <button
+                        className={`py-3 rounded-xl font-bold ${
+                          item.stock > 0
+                            ? "bg-blue-600 text-white hover:opacity-90"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
+                        disabled={item.stock === 0}
+                      >
+                        {item.stock > 0 ? "Order Now" : "Notify Me"}
+                      </button>
+
+                      <button
+                        onClick={() => setSelectedLocation({ lat, lng })}
+                        className="bg-gray-200 py-3 rounded-xl font-bold hover:bg-gray-300"
+                      >
+                        View Map
+                      </button>
+                    </div>
+                  </article>
+                );
+              })
+            ) : (
+              <div className="text-center py-20 text-gray-500">
+                No Medicines Found
+              </div>
             )}
           </div>
         </div>

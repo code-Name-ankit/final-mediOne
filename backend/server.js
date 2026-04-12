@@ -6,7 +6,7 @@ import cors from "cors";
 
 import searchRoutes from "./routes/searchRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
-
+import searchRoutess from "./routes/searchRoutess.js";
 dotenv.config();
 
 const app = express();
@@ -20,6 +20,7 @@ app.use(cors());
 
 app.use("/api/search", searchRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/searchh", searchRoutess);
 
 // test route
 app.get("/", (req, res) => {

@@ -1,129 +1,143 @@
+// seed.js
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-
-import Pharmacy from "./models/Pharmacy.js";
-import Medicine from "./models/Medicine.js";
+import MedicalStore from "./models/MedicalStore.js";
+import Medicine from "./models/Medicines.js"; // ✅ fix
+import StoreMedicine from "./models/StoreMedicine.js";
 
 dotenv.config();
 
-// 🔗 MongoDB connect
-const connectDB = async () => {
-  try {
-    await mongoose.connect(process.env.MONGO_URI);
-    console.log("MongoDB Connected for seeding...");
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-};
+await mongoose.connect(process.env.MONGO_URI);
+console.log("DB Connected");
 
-// 🏥 Fake Pharmacy Data (Surat)
-const pharmacies = [
+// 🧹 Purana data delete
+await MedicalStore.deleteMany();
+await Medicine.deleteMany();
+await StoreMedicine.deleteMany();
+
+console.log("Old Data Deleted 🗑️");
+
+// 💊 Medicines
+const medicines = await Medicine.insertMany([
+  { name: "Paracetamol", brand: "Dolo", category: "Fever" },
+  { name: "Ibuprofen", brand: "Brufen", category: "Pain" },
+  { name: "Amoxicillin", brand: "Mox", category: "Antibiotic" },
+  { name: "Cetirizine", brand: "Cetzine", category: "Allergy" },
+  { name: "Pantoprazole", brand: "Pantocid", category: "Acidity" },
+]);
+
+// 🏥 Stores (Surat based locations)
+const stores = await MedicalStore.insertMany([
   {
-    name: "Apollo Pharmacy Adajan",
-    phone: "9876543210",
+    name: "Apollo Medical Surat",
+    address: "Ring Road, Surat",
+    location: {
+      type: "Point",
+      coordinates: [72.8311, 21.1702], // Surat center
+    },
+  },
+  {
+    name: "MedPlus Adajan",
     address: "Adajan, Surat",
-    city: "Surat",
-    state: "Gujarat",
     location: {
       type: "Point",
-      coordinates: [72.7945, 21.1959],
+      coordinates: [72.7895, 21.1950], // Adajan
     },
-    is24Hours: true,
   },
   {
-    name: "MedPlus Pharmacy Vesu",
-    phone: "9876543211",
+    name: "WellCare Pharmacy Vesu",
     address: "Vesu, Surat",
-    city: "Surat",
-    state: "Gujarat",
     location: {
       type: "Point",
-      coordinates: [72.7648, 21.1500],
+      coordinates: [72.7790, 21.1400], // Vesu
     },
   },
   {
-    name: "Wellness Forever Udhna",
-    phone: "9876543212",
-    address: "Udhna, Surat",
-    city: "Surat",
-    state: "Gujarat",
-    location: {
-      type: "Point",
-      coordinates: [72.8517, 21.1710],
-    },
-  },
-  {
-    name: "City Care Medical Varachha",
-    phone: "9876543213",
+    name: "CarePlus Pharmacy Varachha",
     address: "Varachha, Surat",
-    city: "Surat",
-    state: "Gujarat",
     location: {
       type: "Point",
-      coordinates: [72.8700, 21.2200],
+      coordinates: [72.8600, 21.2150], // Varachha
     },
   },
-];
+]);
 
-// 💊 Fake Medicines
-const createMedicines = (pharmacyId) => [
+// 🔗 StoreMedicine (relations)
+await StoreMedicine.insertMany([
+  // Apollo
   {
-    name: "Paracetamol",
-    brand: "Dolo 650",
-    price: 30,
-    stock: 100,
-    pharmacy: pharmacyId,
-  },
-  {
-    name: "Ibuprofen",
-    brand: "Brufen",
-    price: 50,
+    store: stores[0]._id,
+    medicine: medicines[0]._id,
     stock: 60,
-    pharmacy: pharmacyId,
+    price: 25,
   },
   {
-    name: "Cetirizine",
-    brand: "Cetzine",
-    price: 20,
-    stock: 80,
-    pharmacy: pharmacyId,
+    store: stores[0]._id,
+    medicine: medicines[1]._id,
+    stock: 40,
+    price: 35,
   },
-];
+  {
+    store: stores[0]._id,
+    medicine: medicines[2]._id,
+    stock: 25,
+    price: 85,
+  },
 
-// 🌱 Seed Function
-const seedData = async () => {
-  try {
-    await connectDB();
+  // MedPlus Adajan
+  {
+    store: stores[1]._id,
+    medicine: medicines[0]._id,
+    stock: 30,
+    price: 22,
+  },
+  {
+    store: stores[1]._id,
+    medicine: medicines[3]._id,
+    stock: 70,
+    price: 18,
+  },
+  {
+    store: stores[1]._id,
+    medicine: medicines[4]._id,
+    stock: 20,
+    price: 55,
+  },
 
-    // ❌ Purana data delete
-    await Pharmacy.deleteMany();
-    await Medicine.deleteMany();
+  // WellCare Vesu
+  {
+    store: stores[2]._id,
+    medicine: medicines[1]._id,
+    stock: 50,
+    price: 33,
+  },
+  {
+    store: stores[2]._id,
+    medicine: medicines[2]._id,
+    stock: 15,
+    price: 75,
+  },
+  {
+    store: stores[2]._id,
+    medicine: medicines[3]._id,
+    stock: 40,
+    price: 20,
+  },
 
-    console.log("Old data cleared...");
+  // CarePlus Varachha
+  {
+    store: stores[3]._id,
+    medicine: medicines[0]._id,
+    stock: 45,
+    price: 24,
+  },
+  {
+    store: stores[3]._id,
+    medicine: medicines[4]._id,
+    stock: 35,
+    price: 52,
+  },
+]);
 
-    // ✅ Insert pharmacies
-    const createdPharmacies = await Pharmacy.insertMany(pharmacies);
-
-    console.log("Pharmacies inserted...");
-
-    // ✅ Insert medicines for each pharmacy
-    let medicines = [];
-
-    createdPharmacies.forEach((pharmacy) => {
-      medicines = [...medicines, ...createMedicines(pharmacy._id)];
-    });
-
-    await Medicine.insertMany(medicines);
-
-    console.log("Medicines inserted...");
-
-    console.log("✅ Seeding completed!");
-    process.exit();
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-};
-
-seedData();
+console.log("Surat Fake Data Inserted ✅");
+process.exit();

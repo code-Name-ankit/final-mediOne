@@ -78,7 +78,7 @@ function App() {
         </Route>
 
         {/* --- DOCTOR ROUTES (Dashboard with Sidebar - NO User Navbar/Footer) --- */}
-        <Route path="/doctor" element={<DoctorLayout />}>
+        <Route path="/doctors" element={<DoctorLayout />}>
           <Route index element={<DoctorDashboard />} />
           <Route path="appointments" element={<Appointments />} />
           <Route path="consultation" element={<Consultation />} />

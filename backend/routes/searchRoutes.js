@@ -5,6 +5,6 @@ import { protect, authorize } from "../middleware/authMiddleware.js";
 const router = express.Router();
 
 // 🔍 GET /api/search
-router.get("/", protect, authorize("user", "doctor"), searchMedicine);
+router.get("/", searchMedicine);
 
 export default router;
