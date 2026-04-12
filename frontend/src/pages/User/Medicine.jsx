@@ -13,7 +13,7 @@ export default function Medicine() {
   const [location, setLocation] = useState(null);
 
   const [distance, setDistance] = useState("10000");
-  const [price, setPrice] = useState("Under ₹50");
+  const [price, setPrice] = useState("Any");
   const [availability, setAvailability] = useState("In Stock");
   const [selectedLocation, setSelectedLocation] = useState(null);
   // 📍 Get location (click on location section)
@@ -39,7 +39,7 @@ export default function Medicine() {
           name: medicine,
           lat: location.lat,
           lng: location.lng,
-          distance
+          distance,
         },
         headers: {
           Authorization: `Bearer ${token}`,
@@ -126,7 +126,6 @@ export default function Medicine() {
                 <option value="10000">10km</option>
               </select>
             </div>
-
             {/* Availability */}
             <div className="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-xl text-sm font-medium">
               <span className="text-outline">Availability:</span>
@@ -139,7 +138,6 @@ export default function Medicine() {
                 <option value="All">All</option>
               </select>
             </div>
-
             {/* Price */}
             <div className="flex items-center gap-2 px-4 py-2 bg-surface-container-low rounded-xl text-sm font-medium">
               <span className="text-outline">Price Range:</span>
@@ -153,17 +151,16 @@ export default function Medicine() {
                 <option value="Any">Any</option>
               </select>
             </div>
-
             {/* Divider */}
             <div className="h-6 w-px bg-outline-variant/30"></div>
-
             {/* More Filters */}
             <button className="flex items-center gap-2 px-4 py-2 text-primary font-bold text-sm">
               <span className="material-symbols-outlined text-[18px]">
                 tune
               </span>
               More Filters
-            </button>w
+            </button>
+            w
           </div>
         </div>
       </section>
@@ -259,25 +256,29 @@ export default function Medicine() {
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
-  <button
-    onClick={() => navigate(`/medical-detail/${item.storeId}`)}
-    className={`py-3 rounded-xl font-bold ${
-      item.stock > 0
-        ? "bg-blue-600 text-white hover:opacity-90"
-        : "bg-gray-300 text-gray-500 cursor-not-allowed"
-    }`}
-    disabled={item.stock === 0}
-  >
-    {item.stock > 0 ? "Order Now" : "Notify Me"}
-  </button>
+                      <button
+                        onClick={() =>
+                          navigate(`/medical-detail/${item.storeId}`)
+                        }
+                        className={`py-3 rounded-xl font-bold ${
+                          item.stock > 0
+                            ? "bg-blue-600 text-white hover:opacity-90"
+                            : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                        }`}
+                        disabled={item.stock === 0}
+                      >
+                        {item.stock > 0 ? "Order Now" : "Notify Me"}
+                      </button>
 
-  <button
-    onClick={() => navigate(`/medical-detail/${item.storeId}`)}
-    className="bg-gray-200 py-3 rounded-xl font-bold hover:bg-gray-300"
-  >
-    View Details
-  </button>
-</div>
+                      <button
+                        onClick={() =>
+                          navigate(`/medical-detail/${item.storeId}`)
+                        }
+                        className="bg-gray-200 py-3 rounded-xl font-bold hover:bg-gray-300"
+                      >
+                        View Details
+                      </button>
+                    </div>
                   </article>
                 );
               })

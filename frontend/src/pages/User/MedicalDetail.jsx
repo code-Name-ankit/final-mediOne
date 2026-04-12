@@ -122,7 +122,7 @@ export default function MedicalDetail() {
             <div class="flex flex-col md:flex-row gap-4 mb-8 items-center justify-between">
               <div class="flex gap-2 overflow-x-auto pb-2 w-full md:w-auto no-scrollbar">
                 <button class="bg-primary text-white px-5 py-2 rounded-full text-sm font-semibold whitespace-nowrap">
-                  All Medicines
+                  All 
                 </button>
                 <button class="bg-surface-container-low text-on-surface-variant px-5 py-2 rounded-full text-sm font-medium hover:bg-surface-container-high whitespace-nowrap">
                   Diabetes

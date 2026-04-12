@@ -13,7 +13,8 @@ import Signup from "./pages/User/Signup";
 import MedicalDetail from "./pages/User/MedicalDetail";
 import ChackOut from "./pages/User/ChackOut";
 import OrderSuccess from "./pages/User/OrderSuccess";
-
+import LabDetail from "./pages/User/LabDetail";
+import TestCheckout from "./pages/User/TestCheckout";
 
 // Pharmacy imports
 import Layout from "./pages/medical/Layout";
@@ -60,10 +61,11 @@ function App() {
          <Route path="/medical-detail/:id" element={<MedicalDetail />} />
         <Route path="/checkout" element={<ChackOut />} />
         <Route path="/order-success" element={<OrderSuccess />} />
+        <Route path="/lab-detail/" element={<LabDetail />} />
+        <Route path="/test-checkout" element={<TestCheckout />} />
 
 
-
-        {/* --- PHARMACY ROUTES (Dashboard with Sidebar - NO User Navbar/Footer) --- */}
+              {/* --- PHARMACY ROUTES (Dashboard with Sidebar - NO User Navbar/Footer) --- */}
         <Route path="/pharmacy" element={<Layout />}>
           <Route index element={<Dashboard />} />
           <Route path="orders" element={<Orders />} />

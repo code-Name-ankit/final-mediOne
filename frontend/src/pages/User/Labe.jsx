@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import MapView from "../User/MapView";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function Labe() {
+    const navigate = useNavigate();
   const [labs, setLabs] = useState([]);
   const [loading, setLoading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
@@ -162,7 +164,20 @@ export default function Labe() {
                   <p className="text-xl font-black text-primary">₹{lab.price}</p>
                 </div>
                 <div className="mt-6 flex gap-3">
-                  <button className="flex-1 py-2.5 rounded-xl font-bold text-white bg-primary text-sm shadow-md shadow-primary/20">Book Now</button>
+                  <button 
+                   onClick={() =>
+                    navigate("/test-checkout", {
+                      state: {
+                        item: {
+                          id: lab._id,
+                          name: lab.name,
+                          price: lab.price,
+                          type: "lab"
+                        }
+                      },
+                    })
+                  }
+                  className="flex-1 py-2.5 rounded-xl font-bold text-white bg-primary text-sm shadow-md shadow-primary/20">Book Now</button>
                   <button className="px-5 py-2.5 rounded-xl bg-slate-50 border border-slate-200 text-sm font-bold text-slate-600">Details</button>
                 </div>
               </div>
